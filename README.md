@@ -2,7 +2,7 @@
 
 SkyCast is a weather forecast Android app designed to provide users with accurate and up-to-date weather information. This project utilizes various Android technologies and architectural patterns to deliver a seamless user experience.
 
-  - [MVVM](#model view ViewModel)
+  - [MVVM](#mVVM)
 
   - [RecyclerView](#recyclerview)
   - [ListAdapter](#listadapter)
@@ -34,7 +34,7 @@ SkyCast is a weather forecast Android app designed to provide users with accurat
 
 
 ### MVVM
-Implementation of the Model View ViewModel and Repository Design Patterns for clean SW Archeticture
+Implementation of the Model View ViewModel and Repository Design Patterns for clean SW architecture
 
 ### RecyclerView
 
@@ -125,7 +125,3 @@ Implementation of two-way data binding for seamless interaction between UI and d
 ### Binding Adapters
 
 Creation of binding adapters for customizing data binding behavior.
-
----
-
-Feel free to expand on each section with specific code examples, explanations, and links to relevant documentation or tutorials. Update the README as your project evolves to keep contributors and users informed about the app's structure and features.
