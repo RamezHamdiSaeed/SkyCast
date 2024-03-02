@@ -125,3 +125,6 @@ Implementation of two-way data binding for seamless interaction between UI and d
 ### Binding Adapters
 
 Creation of binding adapters for customizing data binding behavior.
+
+### Android SDK Version
+34
