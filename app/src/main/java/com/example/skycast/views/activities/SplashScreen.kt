@@ -26,6 +26,8 @@ class SplashScreen : AppCompatActivity() {
                     launch {
                         val intent=Intent(applicationContext,MainActivity::class.java);
                         startActivity(intent)
+                        //now when you navigate back from the main activity the app will be closed
+                        finish()
                     }
                 }
             }
