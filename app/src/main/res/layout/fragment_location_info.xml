@@ -4,17 +4,177 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#FAF6F6"
+    android:backgroundTintMode="screen"
+    android:foregroundTint="#F1EDED"
     tools:context=".views.fragments.LocationFavoriteFragment">
 
-    <TextView
-        android:textColor="#F10A0A"
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location Info Fragment"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="355dp"
+        android:layout_height="331dp"
+        android:layout_marginTop="32dp"
+        android:visibility="visible"
+        app:cardBackgroundColor="#62B8F6"
+        app:cardCornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgCurrentWeatherHumadity"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:src="@tools:sample/avatars"
+                app:layout_constraintStart_toStartOf="@+id/imgCurrentWeatherRains"
+                app:layout_constraintTop_toBottomOf="@+id/imgCurrentWeatherRains"
+                app:srcCompat="@drawable/current_weather_rains" />
+
+            <ImageView
+                android:id="@+id/imgCurrentWeatherRains"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="128dp"
+                android:layout_marginTop="16dp"
+                android:src="@tools:sample/avatars"
+                app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherWind"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                app:srcCompat="@drawable/current_weather_clouds" />
+
+            <ImageView
+                android:id="@+id/imgCurrentWeatherTemp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="12dp"
+                android:src="@tools:sample/avatars"
+                app:layout_constraintStart_toStartOf="@+id/imgCurrentWeatherWind"
+                app:layout_constraintTop_toBottomOf="@+id/imgCurrentWeatherWind"
+                app:srcCompat="@drawable/current_weather_temp" />
+
+            <ImageView
+                android:id="@+id/imgCurrentWeatherWind"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="16dp"
+                android:src="@tools:sample/avatars"
+                app:layout_constraintStart_toStartOf="@+id/divider"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                app:srcCompat="@drawable/current_weather_location" />
+
+            <TextView
+                android:id="@+id/tvCurrentTempUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:text="K"
+                android:textColor="#FBF8F8"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvCurrentTemp"
+                app:layout_constraintStart_toEndOf="@+id/tvCurrentTemp"
+                app:layout_constraintTop_toTopOf="@+id/tvCurrentTemp" />
+
+            <TextView
+                android:id="@+id/tvCurrentTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#F4EFEF"
+                android:textSize="72sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvCurrentTime"
+                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintStart_toStartOf="@+id/tvCurrentTime"
+                app:layout_constraintTop_toBottomOf="@+id/tvCurrentTime"
+                tools:text="24" />
+
+            <TextView
+                android:id="@+id/tvCurrentDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="28dp"
+                android:textColor="#F8F5F5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="sunday | Nov 14" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="300dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="18dp"
+                android:background="?android:attr/listDivider"
+                android:backgroundTint="#FAF6F6"
+                android:foregroundTint="#F4F4F4"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.478"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgCurrentWeatherIcon" />
+
+            <ImageView
+                android:id="@+id/imgCurrentWeatherIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="64dp"
+                android:src="@tools:sample/avatars"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvCurrentCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="#FAF5F5"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="city" />
+
+            <TextView
+                android:id="@+id/tvCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#F8F5F5"
+                app:layout_constraintEnd_toEndOf="@+id/tvCurrentDate"
+                app:layout_constraintHorizontal_bias="0.512"
+                app:layout_constraintStart_toStartOf="@+id/tvCurrentDate"
+                app:layout_constraintTop_toBottomOf="@+id/tvCurrentDate"
+                tools:text="09 : 10" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardHourly"
+        android:layout_width="410dp"
+        android:layout_height="96dp"
+        android:layout_marginTop="32dp"
+        app:cardBackgroundColor="#62B7F5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDaily"
+        android:layout_width="410dp"
+        android:layout_height="202dp"
+        android:layout_marginTop="32dp"
+        app:cardBackgroundColor="#62B6F4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardHourly"
+        tools:layout_editor_absoluteX="1dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

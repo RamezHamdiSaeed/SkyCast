@@ -23,7 +23,9 @@ class LocationInfoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: ")
-        return inflater.inflate(R.layout.fragment_location_info, container, false)
+        val view:View = inflater.inflate(R.layout.fragment_location_info, container, false)
+
+        return view
     }
 
 }
