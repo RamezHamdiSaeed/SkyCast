@@ -18,6 +18,8 @@ import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.Status
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class LocationInfoFragment : Fragment() {
@@ -47,46 +49,39 @@ class LocationInfoFragment : Fragment() {
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myViewModel.currentWeatherConditions.collect { weatherStatus ->
-                    when (weatherStatus) {
-                        is Status.Loading -> {
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: not retrieved yet")
-                        }
-                        is Status.Success -> {
-                            println(weatherStatus.data)
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: ${weatherStatus.data}")
-                        }
-                        else -> {
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: fail")
-                        }
-                    }
-                }
+        handleCrudOperation(myViewModel.currentWeatherConditions,"currentWeatherConditions", onSuccess ={
 
+        }, onLoading = {
 
-            }
-        }
+        })
+        handleCrudOperation(myViewModel.locationInfoByCoordinates,"locationInfoByCoordinates", onSuccess = {
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myViewModel.locationInfoByCoordinates.collect { locationStatus ->
-                    when (locationStatus) {
-                        is Status.Loading -> {
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: not retrieved yet")
-                        }
-                        is Status.Success -> {
-                            println(locationStatus.data)
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: ${locationStatus.data}")
-                        }
-                        else -> {
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: fail")
-                        }
-                    }
-                }
-            }
-        }
+        }, onLoading = {
+
+        })
 
         return view
+    }
+    private fun handleCrudOperation(data: StateFlow<Status>,operationName:String="",onLoading:()->Unit,onSuccess:()->Unit){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                data.collect { status ->
+                    when (status) {
+                        is Status.Loading -> {
+                            onLoading()
+                            Log.d(TAG, "onCreateView: $operationName: not retrieved yet")
+                        }
+                        is Status.Success -> {
+                            println(status.data)
+                            onSuccess()
+                            Log.d(TAG, "onCreateView: $operationName: ${status.data}")
+                        }
+                        else -> {
+                            Log.d(TAG, "onCreateView: $operationName: fail")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
