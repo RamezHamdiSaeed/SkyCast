@@ -1,4 +1,4 @@
-package com.example.skycast.views.fragments
+package com.example.skycast.view.fragments
 
 import android.os.Bundle
 import android.util.Log

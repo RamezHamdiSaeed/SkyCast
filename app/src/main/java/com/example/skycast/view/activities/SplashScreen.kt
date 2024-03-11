@@ -1,4 +1,4 @@
-package com.example.skycast.views.activities
+package com.example.skycast.view.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

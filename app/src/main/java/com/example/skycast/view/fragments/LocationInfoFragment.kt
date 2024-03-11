@@ -1,4 +1,4 @@
-package com.example.skycast.views.fragments
+package com.example.skycast.view.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+
 import com.example.skycast.R
 
+class LocationInfoFragment : Fragment() {
 
-class LocationSearchFragment : Fragment() {
-
-    private val TAG="LocationSearchFragment"
+    private val TAG="LocationInfoFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,9 @@ class LocationSearchFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: ")
-        return inflater.inflate(R.layout.fragment_location_search, container, false)
+        val view:View = inflater.inflate(R.layout.fragment_location_info, container, false)
+
+        return view
     }
 
 }

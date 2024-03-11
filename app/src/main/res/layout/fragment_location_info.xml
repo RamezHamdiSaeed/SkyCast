@@ -7,7 +7,7 @@
     android:backgroundTint="#FAF6F6"
     android:backgroundTintMode="screen"
     android:foregroundTint="#F1EDED"
-    tools:context=".views.fragments.LocationFavoriteFragment">
+    tools:context=".view.fragments.LocationFavoriteFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="64dp"
-                android:src="@tools:sample/avatars"
+                tools:src="@tools:sample/avatars"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -170,15 +170,15 @@
         android:id="@+id/cardHourly"
         android:layout_width="410dp"
         android:layout_height="96dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         app:cardBackgroundColor="#62B7F5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" >
+        app:layout_constraintTop_toBottomOf="@+id/cardView">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -189,14 +189,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardDaily"
-        android:layout_width="410dp"
-        android:layout_height="202dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="408dp"
+        android:layout_height="234dp"
+        android:layout_marginTop="56dp"
         app:cardBackgroundColor="#62B6F4"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardHourly" />
+        app:layout_constraintTop_toBottomOf="@+id/cardHourly"
+        app:layout_constraintVertical_bias="0.948" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
