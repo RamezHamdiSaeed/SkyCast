@@ -30,7 +30,6 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="12dp"
-                android:src="@tools:sample/avatars"
                 app:layout_constraintStart_toStartOf="@+id/imgCurrentWeatherRains"
                 app:layout_constraintTop_toBottomOf="@+id/imgCurrentWeatherRains"
                 app:srcCompat="@drawable/current_weather_rains" />
@@ -41,7 +40,6 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="128dp"
                 android:layout_marginTop="16dp"
-                android:src="@tools:sample/avatars"
                 app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherWind"
                 app:layout_constraintTop_toBottomOf="@+id/divider"
                 app:srcCompat="@drawable/current_weather_clouds" />
@@ -51,7 +49,6 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="12dp"
-                android:src="@tools:sample/avatars"
                 app:layout_constraintStart_toStartOf="@+id/imgCurrentWeatherWind"
                 app:layout_constraintTop_toBottomOf="@+id/imgCurrentWeatherWind"
                 app:srcCompat="@drawable/current_weather_temp" />
@@ -61,7 +58,6 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginTop="16dp"
-                android:src="@tools:sample/avatars"
                 app:layout_constraintStart_toStartOf="@+id/divider"
                 app:layout_constraintTop_toBottomOf="@+id/divider"
                 app:srcCompat="@drawable/current_weather_location" />
