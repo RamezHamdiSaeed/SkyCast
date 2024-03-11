@@ -25,6 +25,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.Group
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="imgCurrentWeatherHumadity,imgCurrentWeatherRains,imgCurrentWeatherTemp,imgCurrentWeatherWind,tvCurrentTempUnit,tvCurrentTemp,tvCurrentDate,divider,imgCurrentWeatherIcon,tvCurrentCity,tvWind,tvWindValue,tvPressure,tvPressureValue,tvHumidity,tvHumidityValue,tvChanceOfRain,tvChanceOfRainValue,tvCurrentTime,imgCurrentWeatherAdd,tvCurrentWeatherDescription"
+                tools:visibility="visible" />
+
             <ImageView
                 android:id="@+id/imgCurrentWeatherHumadity"
                 android:layout_width="32dp"
@@ -67,12 +74,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
-                tools:text="K"
                 android:textColor="#FBF8F8"
                 android:textSize="34sp"
                 app:layout_constraintBottom_toBottomOf="@+id/tvCurrentTemp"
                 app:layout_constraintStart_toEndOf="@+id/tvCurrentTemp"
-                app:layout_constraintTop_toTopOf="@+id/tvCurrentTemp" />
+                app:layout_constraintTop_toTopOf="@+id/tvCurrentTemp"
+                tools:text="K" />
 
             <TextView
                 android:id="@+id/tvCurrentTemp"
@@ -154,20 +161,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                tools:text="3.7"
-                android:textColor="#FAF6F6"
-                app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherWind"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherWind" />
-
-            <TextView
-                android:id="@+id/tvWindValueMU"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
                 android:textColor="#FAF6F6"
                 app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherWind"
                 app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherWind"
-                tools:text="km/h" />
+                tools:text="3.7 km/h" />
 
             <TextView
                 android:id="@+id/tvPressure"
@@ -185,20 +182,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                tools:text="1010"
                 android:textColor="#FAF6F6"
                 app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherTemp"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherTemp" />
-
-            <TextView
-                android:id="@+id/tvPressureValueMU"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
-                tools:text="mbar"
-                android:textColor="#FAF6F6"
-                app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherTemp"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherTemp" />
+                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherTemp"
+                tools:text="1010 mbar" />
 
             <TextView
                 android:id="@+id/tvHumidity"
@@ -216,20 +203,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                tools:text="83"
                 android:textColor="#FAF6F6"
                 app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherHumadity"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherHumadity" />
-
-            <TextView
-                android:id="@+id/tvHumidityValueMU"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
-                android:text="%"
-                android:textColor="#FAF6F6"
-                app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherHumadity"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherHumadity" />
+                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherHumadity"
+                tools:text="83 %" />
 
             <TextView
                 android:id="@+id/tvChanceOfRain"
@@ -247,20 +224,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                tools:text="74"
                 android:textColor="#FAF6F6"
                 app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherRains"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherRains" />
-
-            <TextView
-                android:id="@+id/tvChanceOfRainValueMU"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
-                android:text="%"
-                android:textColor="#FAF6F6"
-                app:layout_constraintStart_toEndOf="@+id/imgCurrentWeatherRains"
-                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherRains" />
+                app:layout_constraintTop_toTopOf="@+id/imgCurrentWeatherRains"
+                tools:text="74 %" />
 
             <TextView
                 android:id="@+id/tvCurrentTime"
@@ -322,17 +289,18 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        app:layout_constraintHeight_percent="33"
         android:id="@+id/cardDaily"
-        android:layout_width="408dp"
-        android:layout_height="234dp"
+        android:layout_width="412dp"
+        android:layout_height="308dp"
         android:layout_marginTop="56dp"
         app:cardBackgroundColor="#62B6F4"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardHourly"
-        app:layout_constraintVertical_bias="0.948" />
+        app:layout_constraintVertical_bias="0.32" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
