@@ -26,6 +26,7 @@ import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.Status
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class LocationInfoFragment : Fragment() {
@@ -86,65 +87,63 @@ class LocationInfoFragment : Fragment() {
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myViewModel.currentWeatherConditions.collect { weatherStatus ->
-                    when (weatherStatus) {
-                        is Status.Loading -> {
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: not retrieved yet")
-                            progressBar.visibility=View.VISIBLE
-                            cardGroup.visibility=View.GONE
+        handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
+            val data:Weather=info as Weather
 
-                        }
-                        is Status.Success -> {
-                            println(weatherStatus.data)
-                            progressBar.visibility=View.GONE
-                            cardGroup.visibility=View.VISIBLE
-                            val data:Weather=weatherStatus.data as Weather
+            progressBar.visibility=View.GONE
+            cardGroup.visibility=View.VISIBLE
 
-                            tvCurrentDate.text=dataManipulator.getDateYMD()
-                            tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
-                            tvCurrentTemp.text=data?.current?.temp.toString()
-                            tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
-                            tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
-                            tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
-                            tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
-                            tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
-                            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,imgCurrentWeatherIcon)
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: ${weatherStatus.data}")
-                        }
-                        else -> {
-                            Log.d(TAG, "onCreateView: currentWeatherConditions: fail")
-                        }
-                    }
-                }
+            tvCurrentDate.text=dataManipulator.getDateYMD()
+            tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
+            tvCurrentTemp.text=data?.current?.temp.toString()
+            tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
+            tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
+            tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
+            tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
+            tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
+            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,imgCurrentWeatherIcon)
+        }, onFail = {
 
+        }, onLoading = {
+            progressBar.visibility=View.VISIBLE
+            cardGroup.visibility=View.GONE
 
-            }
-        }
+        },"currentWeatherConditions")
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                myViewModel.locationInfoByCoordinates.collect { locationStatus ->
-                    when (locationStatus) {
-                        is Status.Loading -> {
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: not retrieved yet")
-                        }
-                        is Status.Success -> {
-                            println(locationStatus.data)
-                            val data:LocationInfo=locationStatus.data as LocationInfo
+        handleCrudOperation(myViewModel.locationInfoByCoordinates, onSuccess = {info->
+                            val data:LocationInfo=info as LocationInfo
                             tvCurrentCity.text=data.address?.city
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: ${locationStatus.data}")
-                        }
-                        else -> {
-                            Log.d(TAG, "onCreateView: locationInfoByCoordinates: fail")
-                        }
-                    }
-                }
-            }
-        }
+        }, onFail = {
+
+        }, onLoading = {
+
+        },"locationInfoByCoordinates")
 
         return view
+    }
+    fun handleCrudOperation(data:StateFlow<Status>,onSuccess:(data:Any)->Unit,onFail:()->Unit,onLoading:()->Unit,operationName:String="info"){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                data.collect { info ->
+                    when (info) {
+                        is Status.Loading -> {
+                            onLoading()
+                            Log.d(TAG, "onCreateView: $operationName: not retrieved yet")
+                        }
+                        is Status.Success -> {
+                            onSuccess(info.data)
+//                            val data:LocationInfo=locationStatus.data as LocationInfo
+//                            tvCurrentCity.text=data.address?.city
+                            Log.d(TAG, "onCreateView: $operationName: ${info.data}")
+                        }
+                        else -> {
+                            onFail()
+                            Log.d(TAG, "onCreateView: $operationName: fail")
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
