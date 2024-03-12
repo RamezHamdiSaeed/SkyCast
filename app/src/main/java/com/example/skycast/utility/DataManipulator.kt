@@ -50,7 +50,7 @@ class DataManipulator (val context: Context){
 
             }
             else->{
-                return plainValue+" "+"%"
+                return "% $plainValue"
 
             }
         }
