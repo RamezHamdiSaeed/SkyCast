@@ -132,8 +132,6 @@ class LocationInfoFragment : Fragment() {
                         }
                         is Status.Success -> {
                             onSuccess(info.data)
-//                            val data:LocationInfo=locationStatus.data as LocationInfo
-//                            tvCurrentCity.text=data.address?.city
                             Log.d(TAG, "onCreateView: $operationName: ${info.data}")
                         }
                         else -> {
