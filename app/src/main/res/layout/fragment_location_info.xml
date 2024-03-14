@@ -288,6 +288,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hourlyList"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_gravity="center"

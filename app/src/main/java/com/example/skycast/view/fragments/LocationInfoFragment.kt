@@ -16,6 +16,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.skycast.R
 import com.example.skycast.model.LocationInfo
@@ -24,6 +26,8 @@ import com.example.skycast.model.Weather
 import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.Status
+import com.example.skycast.view.list.hourly.HourlyListAdapter
+import com.example.skycast.view.list.model.WeatherBriefInfo
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
 import kotlinx.coroutines.flow.StateFlow
@@ -46,6 +50,8 @@ class LocationInfoFragment : Fragment() {
     private lateinit var tvPressureValue:TextView
     private lateinit var imgCurrentWeatherIcon:ImageView
     private lateinit var dataManipulator: DataManipulator
+
+    private lateinit var hourlyList:RecyclerView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +79,15 @@ class LocationInfoFragment : Fragment() {
         tvPressureValue=view.findViewById(R.id.tvPressureValue)
         imgCurrentWeatherIcon=view.findViewById(R.id.imgCurrentWeatherIcon)
         dataManipulator= DataManipulator(context = requireActivity())
+
+        hourlyList=view.findViewById(R.id.hourlyList)
+        hourlyList.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
+        val adapter=HourlyListAdapter()
+        adapter.submitList(listOf(WeatherBriefInfo("22","https://openweathermap.org/img/wn/10d@2x.png","06:00"),
+            WeatherBriefInfo("33","https://openweathermap.org/img/wn/10d@2x.png","09:00"),
+            WeatherBriefInfo("44","https://openweathermap.org/img/wn/10d@2x.png","12:00")
+        ))
+        hourlyList.adapter=adapter
 
 
 
@@ -143,6 +158,7 @@ class LocationInfoFragment : Fragment() {
             }
         }
     }
+
 
 
 }
