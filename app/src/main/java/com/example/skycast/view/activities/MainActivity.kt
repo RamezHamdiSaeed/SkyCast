@@ -11,34 +11,32 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import com.example.skycast.R
+import com.example.skycast.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var bottomNavigationView: BottomNavigationView
+
     lateinit var navController: NavController
-    //drawer to be opened and closed
-    lateinit var drawerLayout: DrawerLayout;
     lateinit var actionBarDrawerToggle:ActionBarDrawerToggle
-    lateinit var navigationView: NavigationView
+    lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        bottomNavigationView=findViewById(R.id.bottom_navigation_bar)
+        binding=ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         navController= Navigation.findNavController(this,R.id.fragmentContainerView)
-        NavigationUI.setupWithNavController(bottomNavigationView,navController)
-        //drawer
-        drawerLayout=findViewById(R.id.myDrawer)
-        actionBarDrawerToggle= ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close)
 
-        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        NavigationUI.setupWithNavController(binding.bottomNavigationBar,navController)
+
+
+        actionBarDrawerToggle= ActionBarDrawerToggle(this,binding.myDrawer,R.string.open,R.string.close)
+
+        binding.myDrawer.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        navigationView=findViewById(R.id.navigationView)
-        navigationView.setNavigationItemSelectedListener{
+        binding.navigationView.setNavigationItemSelectedListener{
             item ->
             when (item.itemId){
             R.id.settingsDrawer->{
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-            drawerLayout.closeDrawer(GravityCompat.START)
+            binding.myDrawer.closeDrawer(GravityCompat.START)
             true
         }
 
