@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.skycast.R
+import com.example.skycast.databinding.FragmentLocationInfoBinding
 import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.model.Weather
@@ -39,20 +40,10 @@ class LocationInfoFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var cardGroup:Group
 
-    private lateinit var tvCurrentCity:TextView
-    private lateinit var tvCurrentDate:TextView
-    private lateinit var tvCurrentTime:TextView
-    private lateinit var tvCurrentTemp:TextView
-    private lateinit var tvCurrentWeatherDescription:TextView
-    private lateinit var tvChanceOfRainValue:TextView
-    private lateinit var tvHumidityValue:TextView
-    private lateinit var tvWindValue:TextView
-    private lateinit var tvPressureValue:TextView
-    private lateinit var imgCurrentWeatherIcon:ImageView
     private lateinit var dataManipulator: DataManipulator
 
     private lateinit var hourlyList:RecyclerView
-
+    private lateinit var binding:FragmentLocationInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,31 +54,20 @@ class LocationInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         Log.d(TAG, "onCreateView: ")
-        val view: View = inflater.inflate(R.layout.fragment_location_info, container, false)
-         progressBar=view.findViewById(R.id.PbCard)
-        cardGroup=view.findViewById(R.id.GCardInfo)
-        tvCurrentCity=view.findViewById(R.id.tvCurrentCity)
-        tvCurrentDate=view.findViewById(R.id.tvCurrentDate)
-        tvCurrentTime=view.findViewById(R.id.tvCurrentTime)
-        tvCurrentTemp=view.findViewById(R.id.tvCurrentTemp)
-        tvCurrentWeatherDescription=view.findViewById(R.id.tvCurrentWeatherDescription)
-        tvChanceOfRainValue=view.findViewById(R.id.tvChanceOfRainValue)
-        tvHumidityValue=view.findViewById(R.id.tvHumidityValue)
-        tvWindValue=view.findViewById(R.id.tvWindValue)
-        tvPressureValue=view.findViewById(R.id.tvPressureValue)
-        imgCurrentWeatherIcon=view.findViewById(R.id.imgCurrentWeatherIcon)
+
+        binding=FragmentLocationInfoBinding.inflate(inflater,container,false)
         dataManipulator= DataManipulator(context = requireActivity())
 
-        hourlyList=view.findViewById(R.id.hourlyList)
-        hourlyList.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
+//        hourlyList=view.findViewById(R.id.hourlyList)
+        binding.hourlyList.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
         val adapter=HourlyListAdapter()
         adapter.submitList(listOf(WeatherBriefInfo("22","https://openweathermap.org/img/wn/10d@2x.png","06:00"),
             WeatherBriefInfo("33","https://openweathermap.org/img/wn/10d@2x.png","09:00"),
             WeatherBriefInfo("44","https://openweathermap.org/img/wn/10d@2x.png","12:00")
         ))
-        hourlyList.adapter=adapter
+        binding.hourlyList.adapter=adapter
 
 
 
@@ -105,36 +85,36 @@ class LocationInfoFragment : Fragment() {
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
             val data:Weather=info as Weather
 
-            progressBar.visibility=View.GONE
-            cardGroup.visibility=View.VISIBLE
+            binding.PbCard.visibility=View.GONE
+            binding.GCardInfo.visibility=View.VISIBLE
 
-            tvCurrentDate.text=dataManipulator.getDateYMD()
-            tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
-            tvCurrentTemp.text=data?.current?.temp.toString()
-            tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
-            tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
-            tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
-            tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
-            tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
-            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,imgCurrentWeatherIcon)
+            binding.tvCurrentDate.text=dataManipulator.getDateYMD()
+            binding.tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
+            binding.tvCurrentTemp.text=data?.current?.temp.toString()
+            binding.tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
+            binding.tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
+            binding.tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
+            binding.tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
+            binding.tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
+            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,binding.imgCurrentWeatherIcon)
         }, onFail = {
 
         }, onLoading = {
-            progressBar.visibility=View.VISIBLE
-            cardGroup.visibility=View.GONE
+            binding.PbCard.visibility=View.VISIBLE
+            binding.GCardInfo.visibility=View.GONE
 
         },"currentWeatherConditions")
 
         handleCrudOperation(myViewModel.locationInfoByCoordinates, onSuccess = {info->
                             val data:LocationInfo=info as LocationInfo
-                            tvCurrentCity.text=data.address?.city
+                            binding.tvCurrentCity.text=data.address?.city
         }, onFail = {
 
         }, onLoading = {
 
         },"locationInfoByCoordinates")
 
-        return view
+        return binding.root
     }
     fun handleCrudOperation(data:StateFlow<Status>,onSuccess:(data:Any)->Unit,onFail:()->Unit,onLoading:()->Unit,operationName:String="info"){
         lifecycleScope.launch {
