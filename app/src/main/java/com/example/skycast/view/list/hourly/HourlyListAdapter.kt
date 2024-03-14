@@ -9,25 +9,24 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skycast.R
+import com.example.skycast.databinding.CardHourlyCardItemBinding
 import com.example.skycast.view.list.model.WeatherBriefInfo
 
 class HourlyListAdapter() :ListAdapter<WeatherBriefInfo,HourlyListAdapter.ViewHolder>(HourlyListDiffUtil()){
-   inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        val time:TextView=itemView.findViewById(R.id.tvItemHour)
-        val icon:ImageView=itemView.findViewById(R.id.imgItemIcon)
-        val temp:TextView=itemView.findViewById(R.id.tvItemTemp)
-    }
+    private lateinit var binding:CardHourlyCardItemBinding
+   inner class ViewHolder(var binding:CardHourlyCardItemBinding):RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.card_hourly_card_item,parent,false)
-        return ViewHolder(view)
+        val inflater:LayoutInflater=LayoutInflater.from(parent.context)
+        binding= CardHourlyCardItemBinding.inflate(inflater,parent,false)
+        return ViewHolder(binding)
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=getItem(position)
-        holder.time.text=item.time
-        holder.temp.text=item.temp
-        Glide.with(holder.itemView).load(item.icon).into(holder.icon)
+        holder.binding.tvItemHour.text=item.time
+        holder.binding.tvItemTemp.text=item.temp
+        Glide.with(holder.itemView).load(item.icon).into(holder.binding.imgItemIcon)
     }
 }

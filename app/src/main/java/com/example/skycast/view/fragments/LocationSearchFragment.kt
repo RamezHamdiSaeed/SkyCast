@@ -26,7 +26,7 @@ class LocationSearchFragment : Fragment() {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: ")
         binding= FragmentLocationSearchBinding.inflate(layoutInflater, container, false)
-        
+
         return binding.root
     }
 
