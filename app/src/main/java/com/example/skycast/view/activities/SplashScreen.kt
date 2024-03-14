@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.example.skycast.R
+import com.example.skycast.databinding.ActivitySplashScreenBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -12,9 +13,11 @@ import kotlinx.coroutines.withContext
 
 class SplashScreen : AppCompatActivity() {
     private val TAG="Splash Screen"
+    lateinit var binding:ActivitySplashScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding=ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onResume() {
