@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.skycast.R
+import com.example.skycast.databinding.FragmentLocationFavoriteBinding
 
 class LocationFavoriteFragment : Fragment() {
 
 private val TAG="LocationFavoriteFragment"
+    private lateinit var binding:FragmentLocationFavoriteBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,7 +24,9 @@ private val TAG="LocationFavoriteFragment"
     ): View? {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: ")
-        return inflater.inflate(R.layout.fragment_location_favorite, container, false)
+        val binding=FragmentLocationFavoriteBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
 }
