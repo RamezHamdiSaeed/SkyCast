@@ -9,6 +9,9 @@ interface RemoteDataSource {
     suspend fun getCurrentWeatherConditions( lat:String,
                                              long: String ,
                                              language:String):Flow<Status>
+    suspend fun getCurrentWeatherForecast( lat:String,
+                                             long: String ,
+                                             ):Flow<Status>
 
     suspend fun getLocationInfoByCoordinates(lat:String,
                                              long: String):Flow<Status>

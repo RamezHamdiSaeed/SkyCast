@@ -24,25 +24,28 @@ import com.example.skycast.databinding.FragmentLocationInfoBinding
 import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.model.Weather
+import com.example.skycast.model.WeatherForecast
 import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
+import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
 import com.example.skycast.view.list.hourly.HourlyListAdapter
 import com.example.skycast.view.list.model.WeatherBriefInfo
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 class LocationInfoFragment : Fragment() {
 
     private val TAG = "LocationInfoFragment"
-    private lateinit var progressBar: ProgressBar
-    private lateinit var cardGroup:Group
-
     private lateinit var dataManipulator: DataManipulator
-
-    private lateinit var hourlyList:RecyclerView
     private lateinit var binding:FragmentLocationInfoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +84,14 @@ class LocationInfoFragment : Fragment() {
         ).get(MyViewModel::class.java)
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
+        myViewModel.getCurrentWeatherForcastAPI()
+//        lifecycleScope.launch {
+//            withContext(Dispatchers.IO){
+//
+//                Log.d(TAG, "onCreateView: fFFFFFFFFForcAAAAAAAAAAAAst ${fetchWeatherForecast("30.5853431","31.5035127","8e3540a48d29fcaa9704ffd3b94bad07")}")
+//
+//            }
+//        }
 
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
             val data:Weather=info as Weather
@@ -98,17 +109,53 @@ class LocationInfoFragment : Fragment() {
             binding.tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
             dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,binding.imgCurrentWeatherIcon)
         }, onFail = {
+            binding.PbCard.visibility=View.VISIBLE
+            binding.GCardInfo.visibility=View.GONE
 
+            if(!NoInternetDialogFragment.isTriggered){
+                NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+                NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+            }
         }, onLoading = {
             binding.PbCard.visibility=View.VISIBLE
             binding.GCardInfo.visibility=View.GONE
 
         },"currentWeatherConditions")
 
+        handleCrudOperation(myViewModel.currentWeatherForecast, onSuccess = {info->
+            val data:WeatherForecast=info as WeatherForecast
+
+            binding.PbHourly.visibility=View.GONE
+            binding.hourlyList.visibility=View.VISIBLE
+//            binding.tvCurrentDate.text=dataManipulator.getDateYMD()
+//            binding.tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
+//            binding.tvCurrentTemp.text=data?.current?.temp.toString()
+//            binding.tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
+//            binding.tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
+//            binding.tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
+//            binding.tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
+//            binding.tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
+//            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,binding.imgCurrentWeatherIcon)
+        }, onFail = {
+            if(!NoInternetDialogFragment.isTriggered){
+                NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+                NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+            }
+        }, onLoading = {
+            binding.PbCard.visibility=View.VISIBLE
+            binding.GCardInfo.visibility=View.GONE
+
+        },"currentWeatherForecast")
+        
+
         handleCrudOperation(myViewModel.locationInfoByCoordinates, onSuccess = {info->
                             val data:LocationInfo=info as LocationInfo
                             binding.tvCurrentCity.text=data.address?.city
         }, onFail = {
+            if(!NoInternetDialogFragment.isTriggered){
+                NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+                NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+            }
 
         }, onLoading = {
 
@@ -139,6 +186,27 @@ class LocationInfoFragment : Fragment() {
         }
     }
 
-
+//    suspend fun fetchWeatherForecast(lat: String, lon: String, apiKey: String): String {
+//        val urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey"
+//
+//        val url = URL(urlString)
+//        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+//        connection.requestMethod = "GET"
+//
+//        val responseCode = connection.responseCode
+//        if (responseCode == HttpURLConnection.HTTP_OK) {
+//            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+//            val response = StringBuilder()
+//            var line: String?
+//            while (reader.readLine().also { line = it } != null) {
+//                response.append(line)
+//            }
+//            reader.close()
+//            connection.disconnect()
+//            return response.toString()
+//        } else {
+//            throw Exception("Failed to fetch weather forecast. Response code: $responseCode")
+//        }
+//    }
 
 }

@@ -7,5 +7,8 @@ interface LocationWeatherRepository {
  suspend fun getCurrentLocationWeatherConditionsAPI(lat:String,
                                                     long: String ,
                                                     language:String): Flow<Status>
+    suspend fun getCurrentLocationWeatherForcastAPI(lat:String,
+                                                       long: String ,
+                                                       ): Flow<Status>
  suspend fun getLocationInfoByCoordinatesAPI(lat: String,long: String):Flow<Status>
 }

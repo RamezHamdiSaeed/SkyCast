@@ -42,9 +42,10 @@
                         style="?android:attr/progressBarStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="164dp"
-                        android:layout_marginTop="148dp"
-                        android:visibility="gone"
+                        android:indeterminateDrawable="@android:drawable/ic_dialog_alert"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -282,20 +283,43 @@
                 android:layout_width="410dp"
                 android:layout_height="96dp"
                 android:layout_marginTop="32dp"
+                android:visibility="visible"
                 app:cardBackgroundColor="#62B7F5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/hourlyList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/card_hourly_card_item" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ProgressBar
+                        android:id="@+id/PbHourly"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/hourlyList"
+                        app:layout_constraintEnd_toEndOf="@+id/hourlyList"
+                        app:layout_constraintStart_toStartOf="@+id/hourlyList"
+                        app:layout_constraintTop_toTopOf="@+id/hourlyList" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/hourlyList"
+                        android:layout_width="352dp"
+                        android:layout_height="91dp"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.5"
+                        tools:itemCount="10"
+                        tools:listitem="@layout/card_hourly_card_item" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 

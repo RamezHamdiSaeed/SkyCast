@@ -21,6 +21,11 @@ class LocationWeatherRepositoryImp(val remoteDataSource: RemoteDataSourceImp) : 
             }
     }
 
+    override suspend fun getCurrentLocationWeatherForcastAPI(
+        lat: String,
+        long: String
+    ): Flow<Status> = remoteDataSource.getCurrentWeatherForecast(lat, long)
+
     override suspend fun getLocationInfoByCoordinatesAPI(
         lat: String,
         long: String

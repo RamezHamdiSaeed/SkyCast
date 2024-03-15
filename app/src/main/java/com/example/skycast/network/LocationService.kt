@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface LocationService {
     @GET("reverse")
-    suspend fun getLocationInfoByCoordinates(@Query("lat") lat:String="30.5853431",
-                                            @Query("lon") long: String = "31.5035127",
+    suspend fun getLocationInfoByCoordinates(@Query("lat") lat:String,
+                                            @Query("lon") long: String,
                                             @Query("format") format:String="json"): Response<LocationInfo>
 }
