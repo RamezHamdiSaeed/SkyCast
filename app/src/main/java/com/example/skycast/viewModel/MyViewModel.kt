@@ -5,9 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.skycast.utility.Status
 import com.example.skycast.model.LocationWeatherRepositoryImp
+import com.example.skycast.model.WeatherInfo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : ViewModel() {
     private val TAG = "MyViewModel"
@@ -20,6 +24,9 @@ class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : Vie
 
     private val _locationInfoByCoordinates = MutableStateFlow<Status>(Status.Loading)
     val locationInfoByCoordinates: StateFlow<Status> = _locationInfoByCoordinates
+
+    private val _savedLocations = MutableStateFlow<Status>(Status.Loading)
+    val savedLocations: StateFlow<Status> = _savedLocations
 
     fun getCurrentWeatherConditionsAPI(lat: String = "30.5853431", long: String = "31.5035127", language: String = "ar") {
         viewModelScope.launch {
@@ -47,4 +54,33 @@ class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : Vie
                 }
         }
     }
+    fun getLocationsDB() {
+        viewModelScope.launch {
+            locationRepositoryImp.getAllLocationsDB()
+                .catch { e-> _savedLocations.value=Status.Fail(e) }
+                .collect(){
+                    _savedLocations.value=it
+                }
+        }
+    }
+    fun insertLocation(location: WeatherInfo) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                //i can handle wether if it inserted successfully or not by returning value from insertLocationDB
+                locationRepositoryImp.insertLocationDB(location)
+                getLocationsDB()
+            }
+        }
+    }
+    fun deleteLocation(location: WeatherInfo) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                //i can handle wether if it inserted successfully or not by returning value from deleteLocationDB
+                locationRepositoryImp.deleteLocationDB(location)
+                getLocationsDB()
+            }
+        }
+    }
+
+
 }

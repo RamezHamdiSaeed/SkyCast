@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.example.skycast.view.list.model.WeatherInfo" />
+            type="com.example.skycast.model.WeatherInfo" />
     </data>
 
     <FrameLayout
@@ -28,7 +28,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/imgItemClose"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_marginStart="4dp"

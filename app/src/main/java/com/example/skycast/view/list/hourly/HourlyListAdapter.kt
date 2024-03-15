@@ -1,14 +1,9 @@
 package com.example.skycast.view.list.hourly
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.skycast.R
 import com.example.skycast.databinding.CardHourlyCardItemBinding
 import com.example.skycast.view.list.model.WeatherBriefInfo
 

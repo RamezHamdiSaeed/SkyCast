@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skycast.databinding.CardDailyCardItemBinding
-import com.example.skycast.databinding.CardHourlyCardItemBinding
 import com.example.skycast.view.list.model.WeatherBriefInfo
 
 class DailyListAdapter() :ListAdapter<WeatherBriefInfo,DailyListAdapter.ViewHolder>(DailyListDiffUtil()){

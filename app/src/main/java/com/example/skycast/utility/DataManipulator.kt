@@ -21,9 +21,11 @@ class DataManipulator (val context: Context){
          val date=listFromResponse?.get(0)?.dt_txt?.split(" ")?.get(0)
         listFromResponse?.forEach{
             if(it?.dt_txt?.split(" ")?.get(0)==date){
-                hourlyList.add(WeatherBriefInfo(getValueWithMeasureUnit(DataType.Temp,it?.main?.temp.toString()) ,
+                hourlyList.add(
+                    WeatherBriefInfo(getValueWithMeasureUnit(DataType.Temp,it?.main?.temp.toString()) ,
                    prepareImageUrl(it?.weather?.get(0)?.icon.toString()) ,
-                    it?.dt_txt?.split(" ")?.get(1)?.split(":")?.get(0)+":00"!!))
+                    it?.dt_txt?.split(" ")?.get(1)?.split(":")?.get(0)+":00"!!)
+                )
             }
             else return hourlyList
 
@@ -37,9 +39,11 @@ class DataManipulator (val context: Context){
             var thisDate:String=it?.dt_txt?.split(" ")?.get(0)!!
             if(thisDate!=date){
                 date=thisDate
-                hourlyList.add(WeatherBriefInfo(getValueWithMeasureUnit(DataType.Temp,it?.main?.temp.toString()) ,
+                hourlyList.add(
+                    WeatherBriefInfo(getValueWithMeasureUnit(DataType.Temp,it?.main?.temp.toString()) ,
                     prepareImageUrl(it?.weather?.get(0)?.icon.toString()),
-                    getDayOfWeekAbbreviated(it?.dt_txt?.split(" ")?.get(0)!!)))
+                    getDayOfWeekAbbreviated(it?.dt_txt?.split(" ")?.get(0)!!))
+                )
             }
 
 

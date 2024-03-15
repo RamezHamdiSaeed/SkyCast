@@ -1,12 +1,15 @@
 package com.example.skycast.model
 
 import android.util.Log
+import com.example.skycast.db.LocationsLocalDataSource
+import com.example.skycast.db.LocationsLocalDataSourceImp
 import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.Status
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 
-class LocationWeatherRepositoryImp(val remoteDataSource: RemoteDataSourceImp) : LocationWeatherRepository {
+class LocationWeatherRepositoryImp(val localDataSource: LocationsLocalDataSourceImp, val remoteDataSource: RemoteDataSourceImp) : LocationWeatherRepository {
     private val TAG ="LocationRepositoryImp"
     override suspend fun getCurrentLocationWeatherConditionsAPI(lat:String,
                                                                 long: String ,
@@ -35,5 +38,17 @@ class LocationWeatherRepositoryImp(val remoteDataSource: RemoteDataSourceImp) : 
                 Log.e(TAG, "getLocationInfoByCoordinatesAPI: Exception - ${e.message}")
                 throw e
             }
+    }
+
+    override suspend fun getAllLocationsDB() : Flow<Status>{
+        return localDataSource.getAllLocations()
+    }
+
+    override suspend fun insertLocationDB(location: WeatherInfo): Long {
+        return localDataSource.insertLocation(location)
+    }
+
+    override suspend fun deleteLocationDB(location: WeatherInfo): Int {
+        return localDataSource.deleteLocation(location)
     }
 }

@@ -14,6 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skycast.databinding.FragmentLocationInfoBinding
+import com.example.skycast.db.LocationsDB
+import com.example.skycast.db.LocationsDao
+import com.example.skycast.db.LocationsLocalDataSource
+import com.example.skycast.db.LocationsLocalDataSourceImp
 import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.model.Weather
@@ -64,6 +68,7 @@ class LocationInfoFragment : Fragment() {
             this,
             MyViewModelFactory(
                 LocationWeatherRepositoryImp(
+                    LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
                     RemoteDataSourceImp()
                 )
             )
