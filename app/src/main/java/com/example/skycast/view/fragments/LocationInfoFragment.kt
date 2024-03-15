@@ -22,6 +22,7 @@ import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
+import com.example.skycast.view.list.daily.DailyListAdapter
 import com.example.skycast.view.list.hourly.HourlyListAdapter
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
@@ -50,15 +51,13 @@ class LocationInfoFragment : Fragment() {
         dataManipulator= DataManipulator(context = requireActivity())
 
         binding.hourlyList.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
+        binding.dailyList.layoutManager=LinearLayoutManager(requireActivity())
 
-        val hourlyListdapter=HourlyListAdapter()
-        binding.hourlyList.adapter=hourlyListdapter
-//        adapter.submitList(listOf(WeatherBriefInfo("22","https://openweathermap.org/img/wn/10d@2x.png","06:00"),
-//            WeatherBriefInfo("33","https://openweathermap.org/img/wn/10d@2x.png","09:00"),
-//            WeatherBriefInfo("44","https://openweathermap.org/img/wn/10d@2x.png","12:00")
-//        ))
+        val hourlyListAdapter=HourlyListAdapter()
+        binding.hourlyList.adapter=hourlyListAdapter
 
-
+        val dailyListAdapter=DailyListAdapter()
+        binding.dailyList.adapter=dailyListAdapter
 
 
         val myViewModel: MyViewModel = ViewModelProvider(
@@ -108,11 +107,12 @@ class LocationInfoFragment : Fragment() {
             binding.PbHourly.visibility=View.GONE
             binding.hourlyList.visibility=View.VISIBLE
             var hourlyList=dataManipulator.filterListForHourlyInfo(data.list)
-            Log.d(TAG, "onCreateView: hourlyList icon : ${hourlyList.get(0).icon}")
-            hourlyListdapter.submitList(hourlyList)
+            hourlyListAdapter.submitList(hourlyList)
 
+            binding.PbDaily.visibility=View.GONE
+            binding.dailyList.visibility=View.VISIBLE
             var dailyList=dataManipulator.filterListForDailyInfo(data.list)
-            Log.d(TAG, "onCreateView: dailyList : ${dailyList.size}")
+            dailyListAdapter.submitList(dailyList)
 
         }, onFail = {
             binding.PbHourly.visibility=View.VISIBLE
@@ -167,27 +167,5 @@ class LocationInfoFragment : Fragment() {
         }
     }
 
-//    suspend fun fetchWeatherForecast(lat: String, lon: String, apiKey: String): String {
-//        val urlString = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$lon&appid=$apiKey"
-//
-//        val url = URL(urlString)
-//        val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
-//        connection.requestMethod = "GET"
-//
-//        val responseCode = connection.responseCode
-//        if (responseCode == HttpURLConnection.HTTP_OK) {
-//            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-//            val response = StringBuilder()
-//            var line: String?
-//            while (reader.readLine().also { line = it } != null) {
-//                response.append(line)
-//            }
-//            reader.close()
-//            connection.disconnect()
-//            return response.toString()
-//        } else {
-//            throw Exception("Failed to fetch weather forecast. Response code: $responseCode")
-//        }
-//    }
 
 }

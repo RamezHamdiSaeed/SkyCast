@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide
 import com.example.skycast.model.ListItem
 import com.example.skycast.view.list.model.WeatherBriefInfo
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -38,12 +39,20 @@ class DataManipulator (val context: Context){
                 date=thisDate
                 hourlyList.add(WeatherBriefInfo(getValueWithMeasureUnit(DataType.Temp,it?.main?.temp.toString()) ,
                     prepareImageUrl(it?.weather?.get(0)?.icon.toString()),
-                    it?.dt_txt?.split(" ")?.get(1)?.split(":")?.get(0)+":00"!!))
+                    getDayOfWeekAbbreviated(it?.dt_txt?.split(" ")?.get(0)!!)))
             }
 
 
         }
         return hourlyList
+    }
+    fun getDayOfWeekAbbreviated(dateString: String): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = dateFormat.parse(dateString)
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val dayOfWeekAbbreviated = SimpleDateFormat("EEE", Locale.getDefault())
+        return dayOfWeekAbbreviated.format(date)
     }
     public fun injectImage(icon:String,imageView: ImageView){
         Glide.with(context).load(prepareImageUrl(icon)).into(imageView)
