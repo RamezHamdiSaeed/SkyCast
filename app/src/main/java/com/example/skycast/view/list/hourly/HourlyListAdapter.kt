@@ -25,8 +25,9 @@ class HourlyListAdapter() :ListAdapter<WeatherBriefInfo,HourlyListAdapter.ViewHo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=getItem(position)
-        holder.binding.tvItemHour.text=item.time
-        holder.binding.tvItemTemp.text=item.temp
-        Glide.with(holder.itemView).load(item.icon).into(holder.binding.imgItemIcon)
+        holder.binding.item=item
+//        holder.binding.tvItemHour.text=item.time
+//        holder.binding.tvItemTemp.text=item.temp
+//        Glide.with(holder.itemView).load(item.icon).into(holder.binding.imgItemIcon)
     }
 }
