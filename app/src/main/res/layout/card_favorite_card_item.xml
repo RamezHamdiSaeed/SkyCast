@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.example.skycast.view.list.model.WeatherBriefInfo" />
+            type="com.example.skycast.view.list.model.WeatherInfo" />
     </data>
 
     <FrameLayout
@@ -16,15 +16,27 @@
         app:layout_constraintHeight_percent="80">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
+            android:id="@+id/cvFavoritItem"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:cardBackgroundColor="#5BABE4"
             app:cardCornerRadius="12dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+                    tools:src="@android:drawable/ic_menu_close_clear_cancel" />
 
                 <TextView
                     android:id="@+id/tvItemTemp"
@@ -37,54 +49,40 @@
                     app:text="@{item.temp}"
                     tools:text="22.4" />
 
+
                 <ImageView
                     android:id="@+id/imgItemIcon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="204dp"
-                    app:layout_constraintStart_toEndOf="@+id/tvItemCity"
-                    app:layout_constraintTop_toTopOf="@+id/tvItemCity"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="56dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:myImageUrl="@{item.icon}"
                     tools:src="@tools:sample/avatars" />
-
-                <TextView
-                    android:id="@+id/tvItemDay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="#FBF9F9"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.155"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.512"
-                    app:text="@{item.time}" />
 
                 <TextView
                     android:id="@+id/tvItemCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="40dp"
                     android:textColor="#FAF5F5"
                     android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.091"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/imgItemIcon"
+                    app:text="@{item.city}"
                     tools:text="zagazig" />
 
                 <TextView
                     android:id="@+id/tvItemWeatherDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="184dp"
                     android:textColor="#F8F5F5"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@+id/tvItemTemp"
                     app:layout_constraintEnd_toEndOf="@+id/imgItemIcon"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/tvItemTemp"
+                    app:layout_constraintStart_toStartOf="@+id/imgItemIcon"
+                    app:text="@{item.description}"
                     tools:text="Weather Condition" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
