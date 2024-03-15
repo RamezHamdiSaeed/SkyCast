@@ -53,7 +53,7 @@ class RemoteDataSourceImp : RemoteDataSource {
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getCurrentWeatherForecast(lat: String, long: String)= flow {
-        val url = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$long&appid=8e3540a48d29fcaa9704ffd3b94bad07"
+        val url = "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$long&units=metric&appid=8e3540a48d29fcaa9704ffd3b94bad07"
 
         try {
             val response = executeHttpGetRequest(url)
