@@ -1,25 +1,18 @@
 package com.example.skycast.view.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
-import com.example.skycast.R
 import com.example.skycast.databinding.FragmentLocationInfoBinding
 import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
@@ -30,17 +23,10 @@ import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
 import com.example.skycast.view.list.hourly.HourlyListAdapter
-import com.example.skycast.view.list.model.WeatherBriefInfo
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 
 class LocationInfoFragment : Fragment() {
 
@@ -63,14 +49,15 @@ class LocationInfoFragment : Fragment() {
         binding=FragmentLocationInfoBinding.inflate(inflater,container,false)
         dataManipulator= DataManipulator(context = requireActivity())
 
-//        hourlyList=view.findViewById(R.id.hourlyList)
         binding.hourlyList.layoutManager=LinearLayoutManager(requireActivity(),LinearLayoutManager.HORIZONTAL,false)
-        val adapter=HourlyListAdapter()
-        adapter.submitList(listOf(WeatherBriefInfo("22","https://openweathermap.org/img/wn/10d@2x.png","06:00"),
-            WeatherBriefInfo("33","https://openweathermap.org/img/wn/10d@2x.png","09:00"),
-            WeatherBriefInfo("44","https://openweathermap.org/img/wn/10d@2x.png","12:00")
-        ))
-        binding.hourlyList.adapter=adapter
+
+        val hourlyListdapter=HourlyListAdapter()
+        binding.hourlyList.adapter=hourlyListdapter
+//        adapter.submitList(listOf(WeatherBriefInfo("22","https://openweathermap.org/img/wn/10d@2x.png","06:00"),
+//            WeatherBriefInfo("33","https://openweathermap.org/img/wn/10d@2x.png","09:00"),
+//            WeatherBriefInfo("44","https://openweathermap.org/img/wn/10d@2x.png","12:00")
+//        ))
+
 
 
 
@@ -85,13 +72,6 @@ class LocationInfoFragment : Fragment() {
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
         myViewModel.getCurrentWeatherForcastAPI()
-//        lifecycleScope.launch {
-//            withContext(Dispatchers.IO){
-//
-//                Log.d(TAG, "onCreateView: fFFFFFFFFForcAAAAAAAAAAAAst ${fetchWeatherForecast("30.5853431","31.5035127","8e3540a48d29fcaa9704ffd3b94bad07")}")
-//
-//            }
-//        }
 
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
             val data:Weather=info as Weather
@@ -101,7 +81,7 @@ class LocationInfoFragment : Fragment() {
 
             binding.tvCurrentDate.text=dataManipulator.getDateYMD()
             binding.tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
-            binding.tvCurrentTemp.text=data?.current?.temp.toString()
+            binding.tvCurrentTemp.text= dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,data?.current?.temp.toString())
             binding.tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
             binding.tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
             binding.tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
@@ -127,23 +107,24 @@ class LocationInfoFragment : Fragment() {
 
             binding.PbHourly.visibility=View.GONE
             binding.hourlyList.visibility=View.VISIBLE
-//            binding.tvCurrentDate.text=dataManipulator.getDateYMD()
-//            binding.tvCurrentTime.text=dataManipulator.getDateYMD(DataManipulator.DateType.Time)
-//            binding.tvCurrentTemp.text=data?.current?.temp.toString()
-//            binding.tvCurrentWeatherDescription.text= data?.current?.weather?.get(0)?.description
-//            binding.tvChanceOfRainValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.clouds.toString())
-//            binding.tvHumidityValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Else,data?.current?.humidity.toString())
-//            binding.tvWindValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Wind,data?.current?.wind_speed.toString())
-//            binding.tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
-//            dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,binding.imgCurrentWeatherIcon)
+            var hourlyList=dataManipulator.filterListForHourlyInfo(data.list)
+            Log.d(TAG, "onCreateView: hourlyList icon : ${hourlyList.get(0).icon}")
+            hourlyListdapter.submitList(hourlyList)
+
+            var dailyList=dataManipulator.filterListForDailyInfo(data.list)
+            Log.d(TAG, "onCreateView: dailyList : ${dailyList.size}")
+
         }, onFail = {
+            binding.PbHourly.visibility=View.VISIBLE
+            binding.hourlyList.visibility=View.GONE
             if(!NoInternetDialogFragment.isTriggered){
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
                 NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
             }
         }, onLoading = {
-            binding.PbCard.visibility=View.VISIBLE
-            binding.GCardInfo.visibility=View.GONE
+            binding.PbHourly.visibility=View.VISIBLE
+            binding.hourlyList.visibility=View.GONE
+
 
         },"currentWeatherForecast")
         
