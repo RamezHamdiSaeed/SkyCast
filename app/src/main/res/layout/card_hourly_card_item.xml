@@ -10,17 +10,17 @@
     </data>
 
     <FrameLayout
-        android:layout_width="96dp"
+        android:layout_width="64dp"
         android:layout_height="match_parent"
-        app:layout_constraintHeight_percent="80"
-        android:padding="3dp">
+        android:padding="3dp"
+        app:layout_constraintHeight_percent="80">
 
         <androidx.cardview.widget.CardView
-            app:cardCornerRadius="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            app:cardBackgroundColor="#5BABE4">
+            app:cardBackgroundColor="#5BABE4"
+            app:cardCornerRadius="30dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
