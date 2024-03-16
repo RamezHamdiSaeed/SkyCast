@@ -16,5 +16,6 @@
     <string name="pressure">Pressure</string>
     <string name="confirm">Confirm</string>
     <string name="enterLocation">Enter Location</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

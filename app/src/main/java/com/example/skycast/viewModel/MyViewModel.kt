@@ -66,6 +66,8 @@ class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : Vie
                 }
         }
     }
+
+
     fun insertLocation(location: WeatherInfo) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

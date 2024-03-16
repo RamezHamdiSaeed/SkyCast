@@ -47,5 +47,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue"
+        android:id="@+id/btnRefresh"
+        android:layout_width="184dp"
+        android:layout_height="0dp"
+        android:text="@string/refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteList" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,8 +19,10 @@ import com.example.skycast.db.LocationsDB
 import com.example.skycast.db.LocationsLocalDataSourceImp
 import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
+import com.example.skycast.model.Weather
 import com.example.skycast.model.WeatherInfo
 import com.example.skycast.network.RemoteDataSourceImp
+import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
 import com.example.skycast.viewModel.MyViewModel
@@ -66,7 +68,31 @@ class LocationSearchFragment : Fragment() {
             myLocationViewModel.getLocationInfoByCoordinatesAPI(currentLatitude,currentLongitude)
             handleCrudOperation(myLocationViewModel.locationInfoByCoordinates, onSuccess = {info->
                 val data: LocationInfo =info as LocationInfo
-                myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, long = currentLongitude, lat = currentLatitude,"","https://openweathermap.org/img/wn/10d@2x.png",""))
+                myViewModel.getCurrentWeatherConditionsAPI(currentLatitude,currentLongitude)
+                handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
+                    val weatherConditions: Weather =info as Weather
+                    val dataManipulator= DataManipulator(requireActivity())
+                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,
+                        long = currentLongitude, lat = currentLatitude,
+                        temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp, weatherConditions?.current?.temp.toString()),
+                       icon= dataManipulator.prepareImageUrl(weatherConditions?.current?.weather?.get(0)?.icon?:""),
+                        description = weatherConditions?.current?.weather?.get(0)?.description?:""))
+
+
+
+                }, onFail = {
+//
+//                    if(!NoInternetDialogFragment.isTriggered){
+//                        NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+//                        NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+//                    }
+                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, long = currentLongitude, lat = currentLatitude,"","",""))
+
+                }, onLoading = {
+
+
+
+                },"currentWeatherConditions")
                 activity?.finish()
             }, onFail = {
                 if(!NoInternetDialogFragment.isTriggered){

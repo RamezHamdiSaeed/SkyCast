@@ -1,29 +1,25 @@
 package com.example.skycast.view.fragments
 
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skycast.databinding.FragmentLocationFavoriteBinding
-import com.example.skycast.db.LocationsDB
-import com.example.skycast.db.LocationsLocalDataSourceImp
-import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.view.list.favorit.FavoritListAdapter
 import com.example.skycast.model.WeatherInfo
-import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.Status
 import com.example.skycast.view.activities.LocationSearchActivity
-import com.example.skycast.view.activities.MainActivity
 import com.example.skycast.viewModel.MyViewModel
-import com.example.skycast.viewModel.MyViewModelFactory
 import com.example.skycast.viewModel.MyViewModelSingleton
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -48,6 +44,27 @@ private val TAG="LocationFavoriteFragment"
         binding.favoriteList.layoutManager= LinearLayoutManager(requireActivity())
 
         myViewModel=MyViewModelSingleton.sharedViewModel
+        val connectivityManager: ConnectivityManager = context?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+        if (networkInfo != null && networkInfo.isConnected) {
+//            MyViewModelSingleton.sharedViewModel.getCurrentWeatherConditionsAPI(item.lat,item.long)
+//            handleCrudOperation(
+//                MyViewModelSingleton.sharedViewModel.currentWeatherConditions,
+//                { info ->
+//                    val data: Weather = info as Weather
+//                    val dataManipulator= DataManipulator(context)
+//                        item.temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,data?.current?.temp.toString())
+//                        item.icon=dataManipulator.prepareImageUrl(data?.current?.weather?.get(0)?.icon?:"")
+//                        item.description=data?.current?.weather?.get(0)?.description?:""
+////                    MyViewModelSingleton.sharedViewModel.insertLocation(item)
+//                },
+//                {
+//                },
+//                {
+//                },
+//                "currentWeatherConditions"
+//            )
+        }
         myViewModel.getLocationsDB()
         val favoritListAdapter= FavoritListAdapter(){
             MyViewModelSingleton.sharedViewModel.deleteLocation(it)
