@@ -1,13 +1,14 @@
 package com.example.skycast.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,14 +16,15 @@ import com.example.skycast.databinding.FragmentLocationFavoriteBinding
 import com.example.skycast.db.LocationsDB
 import com.example.skycast.db.LocationsLocalDataSourceImp
 import com.example.skycast.model.LocationWeatherRepositoryImp
-import com.example.skycast.model.WeatherForecast
 import com.example.skycast.view.list.favorit.FavoritListAdapter
 import com.example.skycast.model.WeatherInfo
 import com.example.skycast.network.RemoteDataSourceImp
-import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
+import com.example.skycast.view.activities.LocationSearchActivity
+import com.example.skycast.view.activities.MainActivity
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
+import com.example.skycast.viewModel.MyViewModelSingleton
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,7 @@ class LocationFavoriteFragment : Fragment() {
 
 private val TAG="LocationFavoriteFragment"
     private lateinit var binding:FragmentLocationFavoriteBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,18 +45,10 @@ private val TAG="LocationFavoriteFragment"
         Log.d(TAG, "onCreateView: ")
         binding=FragmentLocationFavoriteBinding.inflate(inflater, container, false)
         binding.favoriteList.layoutManager= LinearLayoutManager(requireActivity())
-        val myViewModel: MyViewModel = ViewModelProvider(
-            this,
-            MyViewModelFactory(
-                LocationWeatherRepositoryImp(
-                    LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
-                    RemoteDataSourceImp()
-                )
-            )
-        ).get(MyViewModel::class.java)
+
 
         val favoritListAdapter= FavoritListAdapter(){
-            myViewModel.deleteLocation(it)
+            MyViewModelSingleton.sharedViewModel.deleteLocation(it)
         }
         binding.favoriteList.adapter=favoritListAdapter
 
@@ -61,11 +56,11 @@ private val TAG="LocationFavoriteFragment"
         binding.favoriteList.visibility=View.VISIBLE
 
         binding.floatingActionButton.setOnClickListener{
-            Log.d(TAG, "onCreateView: fab pressed")
-            myViewModel.insertLocation(WeatherInfo("zagazig","12.121212","13.22","23","https://openweathermap.org/img/wn/10d@2x.png","good weather"))
+
+            startActivity(Intent(requireActivity(),LocationSearchActivity::class.java))
         }
 
-        handleCrudOperation(myViewModel.savedLocations, onSuccess = {info->
+        handleCrudOperation(MyViewModelSingleton.sharedViewModel.savedLocations, onSuccess = {info->
             val data: List<WeatherInfo> =info as List<WeatherInfo>
             Log.d(TAG, "onCreateView: data: $info")
 //            binding.PbHourly.visibility=View.GONE

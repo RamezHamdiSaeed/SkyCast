@@ -30,6 +30,7 @@ import com.example.skycast.view.list.daily.DailyListAdapter
 import com.example.skycast.view.list.hourly.HourlyListAdapter
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
+import com.example.skycast.viewModel.MyViewModelSingleton
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -64,15 +65,7 @@ class LocationInfoFragment : Fragment() {
         binding.dailyList.adapter=dailyListAdapter
 
 
-        val myViewModel: MyViewModel = ViewModelProvider(
-            this,
-            MyViewModelFactory(
-                LocationWeatherRepositoryImp(
-                    LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
-                    RemoteDataSourceImp()
-                )
-            )
-        ).get(MyViewModel::class.java)
+        val myViewModel: MyViewModel = MyViewModelSingleton.sharedViewModel
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
         myViewModel.getCurrentWeatherForcastAPI()

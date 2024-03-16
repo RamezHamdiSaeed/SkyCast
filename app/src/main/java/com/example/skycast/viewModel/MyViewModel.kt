@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.Serializable
 
-class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : ViewModel() {
+class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : ViewModel(){
     private val TAG = "MyViewModel"
 
     private val _currentWeatherConditions = MutableStateFlow<Status>(Status.Loading)
