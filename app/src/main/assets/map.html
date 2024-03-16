@@ -27,8 +27,14 @@
             var markerLatLng = marker.getLatLng();
             Android.onMarkerMoved(markerLatLng.lat, markerLatLng.lng);
         });
+        map.on('click', function(event){
+        var clickedLatLng = event.latlng;
+        updateMarkerPosition(clickedLatLng.lat, clickedLatLng.lng);
+        Android.onMarkerMoved(clickedLatLng.lat, clickedLatLng.lng);
 
+    });
         function updateMarkerPosition(lat, lng) {
+            console.log('Updating marker position: lat=' + lat + ', lng=' + lng);
             marker.setLatLng([lat, lng]);
             map.panTo([lat, lng]);
         }

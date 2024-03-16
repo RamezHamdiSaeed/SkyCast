@@ -4,6 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -32,6 +36,9 @@ class LocationSearchActivity : AppCompatActivity() {
     private lateinit var fragmentMngr:FragmentManager
     private lateinit var fragmentTransaction: FragmentTransaction
     lateinit var binding:ActivityLocationSearchBinding
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityLocationSearchBinding.inflate(layoutInflater)
@@ -43,12 +50,6 @@ class LocationSearchActivity : AppCompatActivity() {
         fragmentTransaction.commit()
 
 
-//        lifecycleScope.launch {
-//                    launch {
-//                        MyViewModelSingleton.sharedViewModel.insertLocation(WeatherInfo("makkah","12.121212","13.22","23","https://openweathermap.org/img/wn/10d@2x.png","good weather"))
-//                        delay(2000)
-//                        finish()
-//                    }
-//        }
     }
+
 }

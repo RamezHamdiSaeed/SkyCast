@@ -4,27 +4,28 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:textColor="@color/white"
-        android:backgroundTint="@color/blue"
-        android:textColorHint="@color/blue"
-        android:id="@+id/locationEditText"
+        android:id="@+id/etLocationSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter location" />
+        android:backgroundTint="@color/blue"
+        android:hint="@string/enterLocation"
+        android:textColor="@color/white"
+        android:textColorHint="@color/blue" />
 
     <Button
-        android:textColor="@color/white"
-        android:backgroundTint="@color/blue"
-        android:id="@+id/searchButton"
+        android:id="@+id/btnConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/locationEditText"
-        android:text="Search" />
+        android:layout_below="@id/etLocationSearch"
+        android:backgroundTint="@color/blue"
+        android:text="@string/confirm"
+        android:textColor="@color/white" />
 
     <WebView
         android:id="@+id/mapWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchButton" />
+        android:layout_below="@id/btnConfirm"
+        android:visibility="visible" />
 
 </RelativeLayout>

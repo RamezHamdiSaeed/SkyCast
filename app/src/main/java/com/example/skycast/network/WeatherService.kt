@@ -15,10 +15,5 @@ suspend fun getCurrentWeatherConditions(@Query("lat") lat:String,
                                 @Query("exclude") exclude:String = "minutely,hourly,daily",
                                 @Query("units") units:String = "metric",
                                 @Query("appid") apiKey:String="8e3540a48d29fcaa9704ffd3b94bad07"):Response<Weather>
-//    @GET("forecast")
-//    suspend fun getCurrentWeatherForecast(
-//        @Query("lat") lat: String,
-//        @Query("lon") lon: String,
-//        @Query("appid") apiKey: String = "8e3540a48d29fcaa9704ffd3b94bad07"
-//    ): Response<WeatherForecast>
+
 }
