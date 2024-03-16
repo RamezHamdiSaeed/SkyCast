@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -73,7 +72,7 @@ class LocationSearchFragment : Fragment() {
                     val weatherConditions: Weather =info as Weather
                     val dataManipulator= DataManipulator(requireActivity())
                     myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,
-                        long = currentLongitude, lat = currentLatitude,
+                        longitude = currentLongitude, lat = currentLatitude,
                         temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp, weatherConditions?.current?.temp.toString()),
                        icon= dataManipulator.prepareImageUrl(weatherConditions?.current?.weather?.get(0)?.icon?:""),
                         description = weatherConditions?.current?.weather?.get(0)?.description?:""))
@@ -86,7 +85,7 @@ class LocationSearchFragment : Fragment() {
 //                        NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
 //                        NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
 //                    }
-                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, long = currentLongitude, lat = currentLatitude,"","",""))
+                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, longitude = currentLongitude, lat = currentLatitude,"","",""))
 
                 }, onLoading = {
 

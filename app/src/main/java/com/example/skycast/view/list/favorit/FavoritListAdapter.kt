@@ -1,21 +1,12 @@
 package com.example.skycast.view.list.favorit
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.skycast.databinding.CardFavoriteCardItemBinding
-import com.example.skycast.model.Weather
 import com.example.skycast.model.WeatherInfo
-import com.example.skycast.utility.DataManipulator
-import com.example.skycast.utility.Status
-import com.example.skycast.viewModel.MyViewModelSingleton
-import kotlinx.coroutines.flow.StateFlow
-import kotlin.reflect.KFunction5
 
 class FavoritListAdapter(
     var closeButtonOnClick:(weatherInfo:WeatherInfo)->Unit) :ListAdapter<WeatherInfo,FavoritListAdapter.ViewHolder>(FavoritListDiffUtil()){
@@ -57,7 +48,7 @@ class FavoritListAdapter(
         holder.binding.imgItemClose.setOnClickListener{
             closeButtonOnClick(item)
         }
-        Log.d(TAG, "onBindViewHolder: ${item.long}")
+        Log.d(TAG, "onBindViewHolder: ${item.longitude}")
 
     }
 
