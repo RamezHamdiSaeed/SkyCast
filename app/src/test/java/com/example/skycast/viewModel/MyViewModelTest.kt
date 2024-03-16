@@ -1,13 +1,12 @@
 package com.example.skycast.viewModel
 
-import LocationWeatherRepositoryTest
+import LocationWeatherRepositoryFake
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.skycast.model.LocationWeatherRepository
 import com.example.skycast.model.WeatherInfo
 import com.example.skycast.utility.Status
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.junit.Before
@@ -26,7 +25,7 @@ class MyViewModelTest{
 
     @Before
     fun setup(){
-        repo=LocationWeatherRepositoryTest()
+        repo=LocationWeatherRepositoryFake()
 
         viewModel= MyViewModel(repo)
 

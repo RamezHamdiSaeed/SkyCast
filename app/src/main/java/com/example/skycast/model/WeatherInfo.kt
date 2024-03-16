@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "locations")
 
-data class WeatherInfo(@PrimaryKey  var city:String, var long:String, var lat:String, var temp:String, var icon:String, var description:String){
+data class WeatherInfo(@PrimaryKey  var city:String, var longitude:String, var lat:String, var temp:String, var icon:String, var description:String){
     constructor() : this("", "", "", "", "", "")
 }

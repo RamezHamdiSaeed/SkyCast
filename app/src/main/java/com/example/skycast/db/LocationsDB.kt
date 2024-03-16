@@ -8,7 +8,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.skycast.model.WeatherInfo
 
-@Database(entities = arrayOf(WeatherInfo::class), version = 3 )
+@Database(entities = arrayOf(WeatherInfo::class), version = 4 )
 abstract class LocationsDB : RoomDatabase() {
     abstract fun getProductsDao(): LocationsDao
     companion object{

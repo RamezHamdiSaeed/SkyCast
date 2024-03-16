@@ -4,7 +4,7 @@ import com.example.skycast.utility.Status
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class LocationWeatherRepositoryTest : LocationWeatherRepository {
+class LocationWeatherRepositoryFake : LocationWeatherRepository {
 
     override suspend fun getCurrentLocationWeatherConditionsAPI(
         lat: String,
