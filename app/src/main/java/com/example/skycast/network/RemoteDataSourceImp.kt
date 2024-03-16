@@ -30,25 +30,34 @@ class RemoteDataSourceImp : RemoteDataSource {
         language: String
     ) = flow<Status> {
         try {
+            Log.d(TAG, "getCurrentWeatherConditions: lat: $lat long:$long language:$language")
+
             val response = ApiHelper.weatherService.getCurrentWeatherConditions(
                 lat,
                 long,
                 language
             )
+            Log.d(TAG, "getCurrentWeatherConditions: lat: $lat long:$long language:$language")
             if (response.isSuccessful) {
+                Log.d(TAG, "getCurrentWeatherConditions: on successful ")
                 val weather = response.body()
                 if (weather != null) {
                     emit(Status.Success(weather))
                 } else {
                     emit(Status.Fail(InvalidObjectException("Response body is null")))
+                    Log.d(TAG, "getCurrentWeatherConditions: on fail1 ")
+
                 }
             } else {
                 emit(Status.Fail(InvalidObjectException("Failed to retrieve weather conditions")))
-                Log.d(TAG, "getCurrentWeatherConditions: asdfasdfasdfasdfasdfasdfsadf")
+                Log.d(TAG, "getCurrentWeatherConditions: on fail2 ")
+
 
             }
         } catch (e: Exception) {
             emit(Status.Fail(InvalidObjectException("Exception: ${e.message}")))
+            Log.d(TAG, "getCurrentWeatherConditions: on ${e.message}")
+
 
         }
     }.flowOn(Dispatchers.IO)
@@ -87,6 +96,7 @@ class RemoteDataSourceImp : RemoteDataSource {
 
         } catch (e: Exception) {
             emit(Status.Fail(InvalidObjectException("Exception: ${e.message}")))
+            Log.d(TAG, "getLocationInfoByCoordinates: on ${e.message}")
 
         }
     }.flowOn(Dispatchers.IO)

@@ -34,6 +34,8 @@ class MyViewModel(val locationRepositoryImp: LocationWeatherRepositoryImp) : Vie
             locationRepositoryImp.getCurrentLocationWeatherConditionsAPI(lat, long, language)
                 .collect {
                     _currentWeatherConditions.value = it
+                    Log.d(TAG, "getCurrentWeatherForcastAPI: $it")
+
                 }
         }
     }

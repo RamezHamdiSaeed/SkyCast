@@ -34,6 +34,7 @@ import com.example.skycast.viewModel.MyViewModelSingleton
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
+
 class LocationInfoFragment : Fragment() {
 
     private val TAG = "LocationInfoFragment"
@@ -49,9 +50,7 @@ class LocationInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        Log.d(TAG, "onCreateView: ")
-
+        
         binding=FragmentLocationInfoBinding.inflate(inflater,container,false)
         dataManipulator= DataManipulator(context = requireActivity())
 
@@ -90,9 +89,9 @@ class LocationInfoFragment : Fragment() {
             binding.tvPressureValue.text=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Pressure,data?.current?.pressure.toString())
             dataManipulator.injectImage(data?.current?.weather?.get(0)?.icon!!,binding.imgCurrentWeatherIcon)
         }, onFail = {
+            Log.d(TAG, "onCreateView: ${it}")
             binding.PbCard.visibility=View.VISIBLE
             binding.GCardInfo.visibility=View.GONE
-            Log.d(TAG, "onCreateView: faillllllllllllllll")
             if(!NoInternetDialogFragment.isTriggered){
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
                 NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
@@ -100,7 +99,7 @@ class LocationInfoFragment : Fragment() {
         }, onLoading = {
             binding.PbCard.visibility=View.VISIBLE
             binding.GCardInfo.visibility=View.GONE
-            Log.d(TAG, "onCreateView: faillllllllllllllll")
+            Log.d(TAG, "onCreateView: loading")
 
 
         },"currentWeatherConditions")
@@ -141,6 +140,7 @@ class LocationInfoFragment : Fragment() {
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
                 NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
             }
+            Log.d(TAG, "onCreateView: fail when getting location")
 
         }, onLoading = {
 
@@ -148,7 +148,7 @@ class LocationInfoFragment : Fragment() {
 
         return binding.root
     }
-    fun handleCrudOperation(data:StateFlow<Status>,onSuccess:(data:Any)->Unit,onFail:()->Unit,onLoading:()->Unit,operationName:String="info"){
+    fun handleCrudOperation(data:StateFlow<Status>,onSuccess:(data:Any)->Unit,onFail:(msg:String)->Unit,onLoading:()->Unit,operationName:String="info"){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 data.collect { info ->
@@ -161,9 +161,10 @@ class LocationInfoFragment : Fragment() {
                             onSuccess(info.data)
                             Log.d(TAG, "onCreateView: $operationName: ${info.data}")
                         }
-                        else -> {
-                            onFail()
+                        is Status.Fail -> {
+                            onFail(info.msg.toString())
                             Log.d(TAG, "onCreateView: $operationName: fail")
+
                         }
                     }
                 }

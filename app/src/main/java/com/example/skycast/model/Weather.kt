@@ -1,7 +1,7 @@
 package com.example.skycast.model
 
 data class Weather(
-	val alerts: List<String?>? = null,
+//	val alerts: List<String?>? = null,
 	val current: Current? = null,
 	val timezone: String? = null,
 	val timezone_offset: Int? = null,

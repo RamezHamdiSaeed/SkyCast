@@ -66,7 +66,7 @@ class LocationSearchFragment : Fragment() {
             myLocationViewModel.getLocationInfoByCoordinatesAPI(currentLatitude,currentLongitude)
             handleCrudOperation(myLocationViewModel.locationInfoByCoordinates, onSuccess = {info->
                 val data: LocationInfo =info as LocationInfo
-                myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,currentLongitude,currentLatitude,"","https://openweathermap.org/img/wn/10d@2x.png",""))
+                myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, long = currentLongitude, lat = currentLatitude,"","https://openweathermap.org/img/wn/10d@2x.png",""))
                 activity?.finish()
             }, onFail = {
                 if(!NoInternetDialogFragment.isTriggered){
