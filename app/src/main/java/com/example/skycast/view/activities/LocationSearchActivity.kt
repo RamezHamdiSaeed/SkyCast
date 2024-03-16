@@ -42,12 +42,13 @@ class LocationSearchActivity : AppCompatActivity() {
         fragmentTransaction.replace(binding.searchFragmentContainerView.id,locationSearchFragment,"Dynamic Injection")
         fragmentTransaction.commit()
 
-        lifecycleScope.launch {
-                    launch {
-                        MyViewModelSingleton.sharedViewModel.insertLocation(WeatherInfo("makkah","12.121212","13.22","23","https://openweathermap.org/img/wn/10d@2x.png","good weather"))
-                        delay(2000)
-                        finish()
-                    }
-        }
+
+//        lifecycleScope.launch {
+//                    launch {
+//                        MyViewModelSingleton.sharedViewModel.insertLocation(WeatherInfo("makkah","12.121212","13.22","23","https://openweathermap.org/img/wn/10d@2x.png","good weather"))
+//                        delay(2000)
+//                        finish()
+//                    }
+//        }
     }
 }

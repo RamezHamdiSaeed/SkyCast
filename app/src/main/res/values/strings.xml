@@ -14,5 +14,7 @@
     <string name="humidity">Humidity</string>
     <string name="wind">Wind</string>
     <string name="pressure">Pressure</string>
+    <string name="confirm">Confirm</string>
+    <string name="enterLocation">Enter Location</string>
 
 </resources>
