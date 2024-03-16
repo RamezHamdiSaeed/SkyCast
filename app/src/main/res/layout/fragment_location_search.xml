@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/blue"
         android:hint="@string/enterLocation"
-        android:textColor="@color/white"
+        android:textColor="@color/blue"
         android:textColorHint="@color/blue" />
 
     <Button
