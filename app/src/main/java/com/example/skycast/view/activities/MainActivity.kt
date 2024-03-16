@@ -21,8 +21,7 @@ import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
 import com.example.skycast.viewModel.MyViewModelSingleton
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,10 +29,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var actionBarDrawerToggle:ActionBarDrawerToggle
     lateinit var binding:ActivityMainBinding
-    private lateinit var sharedViewModel: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val repository = LocationWeatherRepositoryImp(
+            LocationsLocalDataSourceImp(LocationsDB.getInstance(this).getProductsDao()),
+            RemoteDataSourceImp()
+        )
+        MyViewModelSingleton.sharedViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         navController= Navigation.findNavController(this,R.id.fragmentContainerView)
@@ -61,11 +64,7 @@ class MainActivity : AppCompatActivity() {
             binding.myDrawer.closeDrawer(GravityCompat.START)
             true
         }
-        val repository = LocationWeatherRepositoryImp(
-            LocationsLocalDataSourceImp(LocationsDB.getInstance(this).getProductsDao()),
-            RemoteDataSourceImp()
-        )
-        MyViewModelSingleton.sharedViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
+
 
 
     }

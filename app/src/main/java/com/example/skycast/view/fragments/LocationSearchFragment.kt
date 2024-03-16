@@ -23,7 +23,6 @@ class LocationSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView: ")
         binding= FragmentLocationSearchBinding.inflate(layoutInflater, container, false)
 
