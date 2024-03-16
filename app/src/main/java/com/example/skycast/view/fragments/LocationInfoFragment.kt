@@ -63,9 +63,13 @@ class LocationInfoFragment : Fragment() {
 
         val dailyListAdapter=DailyListAdapter()
         binding.dailyList.adapter=dailyListAdapter
+        val repository = LocationWeatherRepositoryImp(
+            LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
+            RemoteDataSourceImp()
+        )
+        val myViewModel: MyViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
 
 
-        val myViewModel: MyViewModel = MyViewModelSingleton.sharedViewModel
         myViewModel.getLocationInfoByCoordinatesAPI()
         myViewModel.getCurrentWeatherConditionsAPI()
         myViewModel.getCurrentWeatherForcastAPI()
@@ -88,7 +92,7 @@ class LocationInfoFragment : Fragment() {
         }, onFail = {
             binding.PbCard.visibility=View.VISIBLE
             binding.GCardInfo.visibility=View.GONE
-
+            Log.d(TAG, "onCreateView: faillllllllllllllll")
             if(!NoInternetDialogFragment.isTriggered){
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
                 NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
@@ -96,6 +100,8 @@ class LocationInfoFragment : Fragment() {
         }, onLoading = {
             binding.PbCard.visibility=View.VISIBLE
             binding.GCardInfo.visibility=View.GONE
+            Log.d(TAG, "onCreateView: faillllllllllllllll")
+
 
         },"currentWeatherConditions")
 

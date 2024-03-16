@@ -10,13 +10,33 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.skycast.databinding.FragmentLocationSearchBinding
+import com.example.skycast.db.LocationsDB
+import com.example.skycast.db.LocationsLocalDataSourceImp
+import com.example.skycast.model.LocationInfo
+import com.example.skycast.model.LocationWeatherRepositoryImp
+import com.example.skycast.model.WeatherInfo
+import com.example.skycast.network.RemoteDataSourceImp
+import com.example.skycast.utility.NoInternetDialogFragment
+import com.example.skycast.utility.Status
+import com.example.skycast.viewModel.MyViewModel
+import com.example.skycast.viewModel.MyViewModelFactory
+import com.example.skycast.viewModel.MyViewModelSingleton
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 
 class LocationSearchFragment : Fragment() {
 
     private val TAG="LocationSearchFragment"
     private lateinit var binding:FragmentLocationSearchBinding
+    private lateinit var myViewModel: MyViewModel
+    private  var currentLatitude: String="30.5853431"
+    private  var currentLongitude: String="31.5035127"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +53,30 @@ class LocationSearchFragment : Fragment() {
         binding.mapWebView.settings.javaScriptEnabled = true
         binding.mapWebView.webChromeClient = WebChromeClient()
         binding.mapWebView.addJavascriptInterface(WebAppInterface(), "Android")
+        myViewModel=MyViewModelSingleton.sharedViewModel
+
+        val repository = LocationWeatherRepositoryImp(
+            LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
+            RemoteDataSourceImp()
+        )
+        val myLocationViewModel:MyViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
 
         binding.btnConfirm.setOnClickListener {
-            val location = binding.etLocationSearch.text.toString()
+//            binding.mapWebView.loadUrl("javascript:updateMarkerPosition($currentLatitude, $currentLongitude)")
+            myLocationViewModel.getLocationInfoByCoordinatesAPI(currentLatitude,currentLongitude)
+            handleCrudOperation(myLocationViewModel.locationInfoByCoordinates, onSuccess = {info->
+                val data: LocationInfo =info as LocationInfo
+                myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,currentLongitude,currentLatitude,"","https://openweathermap.org/img/wn/10d@2x.png",""))
+                activity?.finish()
+            }, onFail = {
+                if(!NoInternetDialogFragment.isTriggered){
+                    NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+                    NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+                }
 
-            binding.mapWebView.loadUrl("javascript:updateMarkerPosition(30.5853431, 31.5035127)")
+            }, onLoading = {
+
+            },"locationInfoByCoordinates")
         }
 
         binding.mapWebView.loadUrl("file:///android_asset/map.html")
@@ -46,7 +85,32 @@ class LocationSearchFragment : Fragment() {
     inner class WebAppInterface {
         @JavascriptInterface
         fun onMarkerMoved(latitude: Double, longitude: Double) {
-            Log.d(TAG, "onMarkerMoved: long: $longitude, lat: $latitude")
+            currentLatitude=latitude.toString()
+            currentLongitude=longitude.toString()
+            Log.d(TAG, "onMarkerMoved: cLat: $currentLatitude, cLong: $currentLongitude")
+
+        }
+    }
+    fun handleCrudOperation(data: StateFlow<Status>, onSuccess:(data:Any)->Unit, onFail:()->Unit, onLoading:()->Unit, operationName:String="info"){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                data.collect { info ->
+                    when (info) {
+                        is Status.Loading -> {
+                            onLoading()
+                            Log.d(TAG, "onCreateView: $operationName: not retrieved yet")
+                        }
+                        is Status.Success -> {
+                            onSuccess(info.data)
+                            Log.d(TAG, "onCreateView: $operationName: ${info.data}")
+                        }
+                        else -> {
+                            onFail()
+                            Log.d(TAG, "onCreateView: $operationName: fail")
+                        }
+                    }
+                }
+            }
         }
     }
 

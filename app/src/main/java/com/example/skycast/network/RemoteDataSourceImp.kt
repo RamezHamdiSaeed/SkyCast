@@ -44,6 +44,7 @@ class RemoteDataSourceImp : RemoteDataSource {
                 }
             } else {
                 emit(Status.Fail(InvalidObjectException("Failed to retrieve weather conditions")))
+                Log.d(TAG, "getCurrentWeatherConditions: asdfasdfasdfasdfasdfasdfsadf")
 
             }
         } catch (e: Exception) {
