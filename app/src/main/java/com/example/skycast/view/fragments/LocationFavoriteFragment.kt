@@ -32,6 +32,7 @@ class LocationFavoriteFragment : Fragment() {
 
 private val TAG="LocationFavoriteFragment"
     private lateinit var binding:FragmentLocationFavoriteBinding
+    private lateinit var myViewModel: MyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,8 @@ private val TAG="LocationFavoriteFragment"
         binding=FragmentLocationFavoriteBinding.inflate(inflater, container, false)
         binding.favoriteList.layoutManager= LinearLayoutManager(requireActivity())
 
-
+        myViewModel=MyViewModelSingleton.sharedViewModel
+        myViewModel.getLocationsDB()
         val favoritListAdapter= FavoritListAdapter(){
             MyViewModelSingleton.sharedViewModel.deleteLocation(it)
         }
@@ -60,7 +62,7 @@ private val TAG="LocationFavoriteFragment"
             startActivity(Intent(requireActivity(),LocationSearchActivity::class.java))
         }
 
-        handleCrudOperation(MyViewModelSingleton.sharedViewModel.savedLocations, onSuccess = {info->
+        handleCrudOperation(myViewModel.savedLocations, onSuccess = {info->
             val data: List<WeatherInfo> =info as List<WeatherInfo>
             Log.d(TAG, "onCreateView: data: $info")
 //            binding.PbHourly.visibility=View.GONE
@@ -72,6 +74,7 @@ private val TAG="LocationFavoriteFragment"
 //            binding.dailyList.visibility=View.VISIBLE
 //            var dailyList=dataManipulator.filterListForDailyInfo(data.list)
 //            dailyListAdapter.submitList(dailyList)
+            Log.d(TAG, "onCreateView: data:${data}")
             favoritListAdapter.submitList(data)
 
         }, onFail = {

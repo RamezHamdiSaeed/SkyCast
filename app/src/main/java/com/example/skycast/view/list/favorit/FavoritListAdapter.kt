@@ -35,7 +35,7 @@ class FavoritListAdapter(var closeButtonOnClick:(weatherInfo:WeatherInfo)->Unit)
         holder.binding.imgItemClose.setOnClickListener{
             closeButtonOnClick(item)
         }
-        Log.d(TAG, "onBindViewHolder: ${item}")
+        Log.d(TAG, "onBindViewHolder: ${item.long}")
 
     }
 }
