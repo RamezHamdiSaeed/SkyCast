@@ -6,19 +6,19 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.example.skycast.views.fragments.LocationInfoFragment"
+        android:name="com.example.skycast.view.fragments.LocationInfoFragment"
         android:label="fragment_location_info"
         tools:layout="@layout/fragment_location_info" />
 
     <fragment
         android:id="@+id/search"
-        android:name="com.example.skycast.views.fragments.LocationSearchFragment"
+        android:name="com.example.skycast.view.fragments.LocationSearchFragment"
         android:label="fragment_location_search"
         tools:layout="@layout/fragment_location_search" />
 
     <fragment
         android:id="@+id/favorite"
-        android:name="com.example.skycast.views.fragments.LocationFavoriteFragment"
+        android:name="com.example.skycast.view.fragments.LocationFavoriteFragment"
         android:label="fragment_location_favorite"
         tools:layout="@layout/fragment_location_favorite" />
 </navigation>

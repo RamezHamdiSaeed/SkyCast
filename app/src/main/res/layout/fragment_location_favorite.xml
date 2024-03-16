@@ -4,17 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.LocationFavoriteFragment">
+    tools:context=".view.fragments.LocationFavoriteFragment">
 
-    <TextView
-        android:id="@+id/favorite"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoriteList"
+        android:layout_width="379dp"
+        android:layout_height="795dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:itemCount="10"
+        tools:listitem="@layout/card_favorite_card_item"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/PbFavorit"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location Favorite Fragment"
-        android:textColor="#F10A0A"
+        android:indeterminateDrawable="@android:drawable/ic_dialog_alert"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:clickable="true"
+        android:outlineAmbientShadowColor="@color/blue"
+        android:outlineSpotShadowColor="@color/white"
+        android:src="@drawable/current_weather_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:textColor="@color/white"
+        android:backgroundTint="@color/blue"
+        android:id="@+id/btnRefresh"
+        android:layout_width="184dp"
+        android:layout_height="0dp"
+        android:text="@string/refresh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteList" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

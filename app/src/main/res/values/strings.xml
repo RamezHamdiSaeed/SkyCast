@@ -10,5 +10,12 @@
     <!-- drawer-->
     <string name="open">Open</string>
     <string name="close">Open</string>
+    <string name="chanceOfRain">Chance Of Rain</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
+    <string name="confirm">Confirm</string>
+    <string name="enterLocation">Enter Location</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

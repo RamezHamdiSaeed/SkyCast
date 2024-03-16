@@ -48,12 +48,14 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    implementation("androidx.test.ext:junit-ktx:1.1.5") // Moved to the implementation block
+    testImplementation("junit:junit:4.13.2") // Removed duplicate
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     //Glide
-    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
+    //picasso
+    implementation ("com.squareup.picasso:picasso:2.8")
     //for Kotlin + workManager
     implementation ("androidx.work:work-runtime-ktx:2.9.0")
     //retrofit with gson
@@ -72,18 +74,23 @@ dependencies {
     implementation ("com.squareup.picasso:picasso:2.8")
     //mvvm
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
     //default testing dependencies
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Removed duplicate
     // assertion framework
     testImplementation ("org.hamcrest:hamcrest:2.2")
     testImplementation ("org.hamcrest:hamcrest-library:2.2")
     //AndroidX test dependencies
-    testImplementation ("androidx.test:corektx:1.4.0")
-    testImplementation("androidx.test.ext:junitktx:1.1.2")
+    testImplementation ("androidx.test:core-ktx:1.5.0") // Updated version
     //Robolectric
     testImplementation ("org.robolectric:robolectric:4.8")
     //InstantTaskExecutorRule
     testImplementation ("androidx.arch.core:core-testing:2.2.0")
+
+    implementation ("androidx.activity:activity-ktx:1.8.2")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+
+    implementation ("androidx.fragment:fragment-ktx:1.6.2")
+
 }
