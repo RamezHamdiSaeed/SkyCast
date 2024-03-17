@@ -18,6 +18,7 @@ import com.example.skycast.databinding.FragmentLocationFavoriteBinding
 import com.example.skycast.view.list.favorit.FavoritListAdapter
 import com.example.skycast.model.WeatherInfo
 import com.example.skycast.utility.Status
+import com.example.skycast.view.activities.LocationInfoActivity
 import com.example.skycast.view.activities.LocationSearchActivity
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelSingleton
@@ -49,7 +50,7 @@ private val TAG="LocationFavoriteFragment"
         if (networkInfo != null && networkInfo.isConnected) {
         }
         myViewModel.getLocationsDB()
-        val favoritListAdapter= FavoritListAdapter(){
+        val favoritListAdapter= FavoritListAdapter({latitude, longitude ->  startActivity(Intent(requireActivity(),LocationInfoActivity::class.java).putExtra("latitude",latitude).putExtra("longitude",longitude))}){
             MyViewModelSingleton.sharedViewModel.deleteLocation(it)
         }
         binding.favoriteList.adapter=favoritListAdapter

@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.skycast.databinding.CardFavoriteCardItemBinding
 import com.example.skycast.model.WeatherInfo
 
-class FavoritListAdapter(
-    var closeButtonOnClick:(weatherInfo:WeatherInfo)->Unit) :ListAdapter<WeatherInfo,FavoritListAdapter.ViewHolder>(FavoritListDiffUtil()){
+class FavoritListAdapter(var itemOnClick:(latitude:String,longitude:String)->Unit,
+    var closeButtonOnClick:(weatherInfo:WeatherInfo)->Unit
+    ) :ListAdapter<WeatherInfo,FavoritListAdapter.ViewHolder>(FavoritListDiffUtil()){
     private lateinit var binding:CardFavoriteCardItemBinding
     private  val TAG:String="FavoriteListAdapter"
    inner class ViewHolder(var binding: CardFavoriteCardItemBinding):RecyclerView.ViewHolder(binding.root)
@@ -26,6 +27,9 @@ class FavoritListAdapter(
         holder.binding.item=item
         holder.binding.imgItemClose.setOnClickListener{
             closeButtonOnClick(item)
+        }
+        holder.binding.cvFavoritItem.setOnClickListener{
+            itemOnClick(item.lat,item.longitude)
         }
         Log.d(TAG, "onBindViewHolder: ${item.longitude}")
 

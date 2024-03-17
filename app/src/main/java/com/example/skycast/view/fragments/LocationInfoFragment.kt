@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 
-class LocationInfoFragment : Fragment() {
+class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:String?=null) : Fragment() {
 
     private val TAG = "LocationInfoFragment"
     private lateinit var dataManipulator: DataManipulator
@@ -52,8 +52,6 @@ class LocationInfoFragment : Fragment() {
 
     private lateinit var  myViewModel:MyViewModel
 
-            private lateinit var longitudeValue:String
-    private lateinit var latitudeValue:String
 
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1001
@@ -86,18 +84,23 @@ class LocationInfoFragment : Fragment() {
         )
         myViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if(latitudeValue==null || longitudeValue==null){
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        // Check if the app has location permissions, request if not
-        if (checkLocationPermission()) {
-            requestLocationUpdates()
-        } else {
-            requestLocationPermission()
+            // Check if the app has location permissions, request if not
+            if (checkLocationPermission()) {
+                requestLocationUpdates()
+            } else {
+                requestLocationPermission()
+            }
+        }
+        else{
+            myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
+
         }
 
-        myViewModel.getLocationInfoByCoordinatesAPI()
-        myViewModel.getCurrentWeatherConditionsAPI()
-        myViewModel.getCurrentWeatherForcastAPI()
 
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
             val data:Weather=info as Weather
@@ -160,7 +163,7 @@ class LocationInfoFragment : Fragment() {
 
         handleCrudOperation(myViewModel.locationInfoByCoordinates, onSuccess = {info->
                             val data:LocationInfo=info as LocationInfo
-                            binding.tvCurrentCity.text=data.address?.city
+                            binding.tvCurrentCity.text=data.address?.city?:data.address?.country
         }, onFail = {
             if(!NoInternetDialogFragment.isTriggered){
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
@@ -211,9 +214,9 @@ class LocationInfoFragment : Fragment() {
                     longitudeValue = longitude.toString()
                     Log.d(TAG, "requestLocationUpdates: gps: lat: $latitudeValue, long: $longitudeValue")
 
-                    myViewModel.getCurrentWeatherConditionsAPI(latitudeValue,longitudeValue)
-                    myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue,longitudeValue)
-                       myViewModel.getCurrentWeatherForcastAPI(latitudeValue,longitudeValue)
+                    myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
+                    myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
+                       myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
                     Log.d(TAG, "requestLocationUpdates: gps: lat: $latitudeValue, long: $longitudeValue")
 
                 }
