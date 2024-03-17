@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+//    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id ("kotlin-kapt")
 }
 
@@ -51,6 +52,8 @@ dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5") // Moved to the implementation block
     testImplementation("junit:junit:4.13.2") // Removed duplicate
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    //google play services
+    implementation ("com.google.android.gms:play-services-location:21.2.0")
     //Glide
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")

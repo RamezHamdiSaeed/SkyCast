@@ -1,12 +1,19 @@
 package com.example.skycast.view.fragments
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +29,7 @@ import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.model.Weather
 import com.example.skycast.model.WeatherForecast
+import com.example.skycast.model.WeatherInfo
 import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
@@ -31,15 +39,26 @@ import com.example.skycast.view.list.hourly.HourlyListAdapter
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
 import com.example.skycast.viewModel.MyViewModelSingleton
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 
-class LocationInfoFragment : Fragment() {
+class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:String?=null,var isFromSearchOrFavorite:Boolean=false) : Fragment() {
 
     private val TAG = "LocationInfoFragment"
     private lateinit var dataManipulator: DataManipulator
     private lateinit var binding:FragmentLocationInfoBinding
+
+    private lateinit var  myViewModel:MyViewModel
+
+
+
+
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1001
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,12 +85,9 @@ class LocationInfoFragment : Fragment() {
             LocationsLocalDataSourceImp(LocationsDB.getInstance(requireActivity()).getProductsDao()),
             RemoteDataSourceImp()
         )
-        val myViewModel: MyViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
+        myViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
 
 
-        myViewModel.getLocationInfoByCoordinatesAPI()
-        myViewModel.getCurrentWeatherConditionsAPI()
-        myViewModel.getCurrentWeatherForcastAPI()
 
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
             val data:Weather=info as Weather
@@ -134,7 +150,7 @@ class LocationInfoFragment : Fragment() {
 
         handleCrudOperation(myViewModel.locationInfoByCoordinates, onSuccess = {info->
                             val data:LocationInfo=info as LocationInfo
-                            binding.tvCurrentCity.text=data.address?.city
+                            binding.tvCurrentCity.text=data.address?.city?:data.address?.country
         }, onFail = {
             if(!NoInternetDialogFragment.isTriggered){
                 NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
@@ -147,8 +163,83 @@ class LocationInfoFragment : Fragment() {
         },"locationInfoByCoordinates")
 
         return binding.root
+
+    }//end of onCreateView
+
+    override fun onResume() {
+        super.onResume()
+        if(latitudeValue==null || longitudeValue==null || !isFromSearchOrFavorite){
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+            // Check if the app has location permissions, request if not
+            if (checkLocationPermission()) {
+                requestLocationUpdates()
+            } else {
+                requestLocationPermission()
+            }
+        }
+        else{
+            myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
+
+        }
+
     }
-    fun handleCrudOperation(data:StateFlow<Status>,onSuccess:(data:Any)->Unit,onFail:(msg:String)->Unit,onLoading:()->Unit,operationName:String="info"){
+
+    private fun checkLocationPermission(): Boolean {
+        return (ContextCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            LOCATION_PERMISSION_REQUEST_CODE
+        )
+    }
+
+    private fun requestLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                Log.d(TAG, "requestLocationUpdates: outside ")
+
+                if (location != null) {
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    latitudeValue = latitude.toString()
+                    longitudeValue = longitude.toString()
+
+                    myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
+                    myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
+                       myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
+
+                }
+            }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    fun handleCrudOperation(data:StateFlow<Status>, onSuccess:(data:Any)->Unit, onFail:(msg:String)->Unit, onLoading:()->Unit, operationName:String="info"){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 data.collect { info ->

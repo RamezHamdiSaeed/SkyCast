@@ -11,7 +11,7 @@ object NoInternetDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setMessage("No internet connection. Please check your connection and try again.")
+            .setMessage("Please check your connection and try again, you can check the favourite locations last saved info")
             .setPositiveButton("OK") { dialogInterface: DialogInterface, _: Int ->
                 dialogInterface.dismiss()
                 isTriggered=false

@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skycast.databinding.FragmentLocationFavoriteBinding
 import com.example.skycast.view.list.favorit.FavoritListAdapter
 import com.example.skycast.model.WeatherInfo
+import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.Status
+import com.example.skycast.view.activities.LocationInfoActivity
 import com.example.skycast.view.activities.LocationSearchActivity
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelSingleton
@@ -47,26 +49,9 @@ private val TAG="LocationFavoriteFragment"
         val connectivityManager: ConnectivityManager = context?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
-//            MyViewModelSingleton.sharedViewModel.getCurrentWeatherConditionsAPI(item.lat,item.long)
-//            handleCrudOperation(
-//                MyViewModelSingleton.sharedViewModel.currentWeatherConditions,
-//                { info ->
-//                    val data: Weather = info as Weather
-//                    val dataManipulator= DataManipulator(context)
-//                        item.temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,data?.current?.temp.toString())
-//                        item.icon=dataManipulator.prepareImageUrl(data?.current?.weather?.get(0)?.icon?:"")
-//                        item.description=data?.current?.weather?.get(0)?.description?:""
-////                    MyViewModelSingleton.sharedViewModel.insertLocation(item)
-//                },
-//                {
-//                },
-//                {
-//                },
-//                "currentWeatherConditions"
-//            )
         }
         myViewModel.getLocationsDB()
-        val favoritListAdapter= FavoritListAdapter(){
+        val favoritListAdapter= FavoritListAdapter({latitude, longitude ->  startActivity(Intent(requireActivity(),LocationInfoActivity::class.java).putExtra("latitude",latitude).putExtra("longitude",longitude))}){
             MyViewModelSingleton.sharedViewModel.deleteLocation(it)
         }
         binding.favoriteList.adapter=favoritListAdapter
@@ -76,35 +61,22 @@ private val TAG="LocationFavoriteFragment"
 
         binding.floatingActionButton.setOnClickListener{
 
-            startActivity(Intent(requireActivity(),LocationSearchActivity::class.java))
+            startActivity(Intent(requireActivity(),LocationSearchActivity::class.java).putExtra("isForInsert",true))
         }
 
         handleCrudOperation(myViewModel.savedLocations, onSuccess = {info->
+            val dataManipulator=DataManipulator(requireActivity())
             val data: List<WeatherInfo> =info as List<WeatherInfo>
             Log.d(TAG, "onCreateView: data: $info")
-//            binding.PbHourly.visibility=View.GONE
-//            binding.hourlyList.visibility=View.VISIBLE
-//            var hourlyList=dataManipulator.filterListForHourlyInfo(data.list)
-//            hourlyListAdapter.submitList(hourlyList)
-//
-//            binding.PbDaily.visibility=View.GONE
-//            binding.dailyList.visibility=View.VISIBLE
-//            var dailyList=dataManipulator.filterListForDailyInfo(data.list)
-//            dailyListAdapter.submitList(dailyList)
             Log.d(TAG, "onCreateView: data:${data}")
+            data.forEach{
+                it.temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,it.temp)
+            }
             favoritListAdapter.submitList(data)
 
         }, onFail = {
-//            binding.PbHourly.visibility=View.VISIBLE
-//            binding.hourlyList.visibility=View.GONE
-//            if(!NoInternetDialogFragment.isTriggered){
-//                NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
-//                NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
-//            }
-        }, onLoading = {
-//            binding.PbHourly.visibility=View.VISIBLE
-//            binding.hourlyList.visibility=View.GONE
 
+        }, onLoading = {
 
         },"local data base data (locations)")
 

@@ -82,8 +82,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-//    fun getSharedViewModel(): MyViewModel {
-//        return sharedViewModel
-//    }
 }
