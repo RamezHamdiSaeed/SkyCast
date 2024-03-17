@@ -26,6 +26,5 @@ class LocationInfoActivity : AppCompatActivity() {
         fragmentTransaction=fragmentMngr.beginTransaction()
         fragmentTransaction.replace(binding.infoFragmentContainerView.id,locationInfoFragment,"Dynamic Injection")
         fragmentTransaction.commit()
-//        Toast.makeText(this, "onCreate: lat: ${intent.getStringExtra("latitude")} long: ${intent.getStringExtra("longitude")}", Toast.LENGTH_SHORT).show()
     }
 }

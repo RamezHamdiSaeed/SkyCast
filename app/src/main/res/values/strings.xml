@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">SkyCast</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
@@ -17,5 +17,27 @@
     <string name="confirm">Confirm</string>
     <string name="enterLocation">Enter Location</string>
     <string name="refresh">Refresh</string>
+    <string name="x">x</string>
+    <string name="temperatureUnit">Temperature unit</string>
+    <string-array name="temperatureUnits">
+        <item>Celsius</item>
+        <item>Kelvin</item>
+        <item>Fahrenheit</item>
+    </string-array>
+    <string name="windUnit">Wind speed unit</string>
+    <string-array name="windUnits">
+        <item>meter/sec</item>
+        <item>miles/hour</item>
+    </string-array>
+    <string name="language">language</string>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Arabic</item>
+    </string-array>
+    <string name="location">location</string>
+    <string-array name="locationOptions">
+        <item>Auto(GPS)</item>
+        <item>Manually</item>
+    </string-array>
 
 </resources>
