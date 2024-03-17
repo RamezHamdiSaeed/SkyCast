@@ -80,11 +80,6 @@ class LocationSearchFragment : Fragment() {
 
 
                 }, onFail = {
-//
-//                    if(!NoInternetDialogFragment.isTriggered){
-//                        NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
-//                        NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
-//                    }
                     myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, longitude = currentLongitude, lat = currentLatitude,"","",""))
 
                 }, onLoading = {

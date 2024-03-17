@@ -23,27 +23,6 @@ class FavoritListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item=getItem(position)
-//        val connectivityManager: ConnectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-//        if (networkInfo != null && networkInfo.isConnected) {
-//            MyViewModelSingleton.sharedViewModel.getCurrentWeatherConditionsAPI(item.lat,item.long)
-//            handleCrudOperation(
-//                MyViewModelSingleton.sharedViewModel.currentWeatherConditions,
-//                { info ->
-//                    val data: Weather = info as Weather
-//                    val dataManipulator= DataManipulator(context)
-//                        item.temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,data?.current?.temp.toString())
-//                        item.icon=dataManipulator.prepareImageUrl(data?.current?.weather?.get(0)?.icon?:"")
-//                        item.description=data?.current?.weather?.get(0)?.description?:""
-////                    MyViewModelSingleton.sharedViewModel.insertLocation(item)
-//                },
-//                {
-//                },
-//                {
-//                },
-//                "currentWeatherConditions"
-//            )
-//        }
         holder.binding.item=item
         holder.binding.imgItemClose.setOnClickListener{
             closeButtonOnClick(item)
