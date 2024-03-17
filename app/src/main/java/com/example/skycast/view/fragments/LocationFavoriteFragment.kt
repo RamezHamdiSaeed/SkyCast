@@ -60,7 +60,7 @@ private val TAG="LocationFavoriteFragment"
 
         binding.floatingActionButton.setOnClickListener{
 
-            startActivity(Intent(requireActivity(),LocationSearchActivity::class.java))
+            startActivity(Intent(requireActivity(),LocationSearchActivity::class.java).putExtra("isForInsert",true))
         }
 
         handleCrudOperation(myViewModel.savedLocations, onSuccess = {info->

@@ -43,7 +43,7 @@ class LocationSearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityLocationSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        locationSearchFragment=LocationSearchFragment()
+        locationSearchFragment=LocationSearchFragment(intent.getBooleanExtra("isForInsert",true))
         fragmentMngr=supportFragmentManager
         fragmentTransaction=fragmentMngr.beginTransaction()
         fragmentTransaction.replace(binding.searchFragmentContainerView.id,locationSearchFragment,"Dynamic Injection")

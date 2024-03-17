@@ -1,5 +1,6 @@
 package com.example.skycast.view.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
 import com.example.skycast.utility.Status
+import com.example.skycast.view.activities.LocationInfoActivity
 import com.example.skycast.viewModel.MyViewModel
 import com.example.skycast.viewModel.MyViewModelFactory
 import com.example.skycast.viewModel.MyViewModelSingleton
@@ -31,7 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
-class LocationSearchFragment : Fragment() {
+class LocationSearchFragment(val isForInsert:Boolean=false) : Fragment() {
 
     private val TAG="LocationSearchFragment"
     private lateinit var binding:FragmentLocationSearchBinding
@@ -64,39 +66,46 @@ class LocationSearchFragment : Fragment() {
 
         binding.btnConfirm.setOnClickListener {
 //            binding.mapWebView.loadUrl("javascript:updateMarkerPosition($currentLatitude, $currentLongitude)")
-            myLocationViewModel.getLocationInfoByCoordinatesAPI(currentLatitude,currentLongitude)
-            handleCrudOperation(myLocationViewModel.locationInfoByCoordinates, onSuccess = {info->
-                val data: LocationInfo =info as LocationInfo
-                myViewModel.getCurrentWeatherConditionsAPI(currentLatitude,currentLongitude)
-                handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
-                    val weatherConditions: Weather =info as Weather
-                    val dataManipulator= DataManipulator(requireActivity())
-                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,
-                        longitude = currentLongitude, lat = currentLatitude,
-                        temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp, weatherConditions?.current?.temp.toString()),
-                       icon= dataManipulator.prepareImageUrl(weatherConditions?.current?.weather?.get(0)?.icon?:""),
-                        description = weatherConditions?.current?.weather?.get(0)?.description?:""))
+    if(isForInsert){
+    myLocationViewModel.getLocationInfoByCoordinatesAPI(currentLatitude,currentLongitude)
+    handleCrudOperation(myLocationViewModel.locationInfoByCoordinates, onSuccess = {info->
+        val data: LocationInfo =info as LocationInfo
+        myViewModel.getCurrentWeatherConditionsAPI(currentLatitude,currentLongitude)
+        handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
+            val weatherConditions: Weather =info as Weather
+            val dataManipulator= DataManipulator(requireActivity())
+            myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,
+                longitude = currentLongitude, lat = currentLatitude,
+                temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp, weatherConditions?.current?.temp.toString()),
+                icon= dataManipulator.prepareImageUrl(weatherConditions?.current?.weather?.get(0)?.icon?:""),
+                description = weatherConditions?.current?.weather?.get(0)?.description?:""))
 
 
 
-                }, onFail = {
-                    myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, longitude = currentLongitude, lat = currentLatitude,"","",""))
+        }, onFail = {
+            myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!, longitude = currentLongitude, lat = currentLatitude,"","",""))
 
-                }, onLoading = {
+        }, onLoading = {
 
 
 
-                },"currentWeatherConditions")
-                activity?.finish()
-            }, onFail = {
-                if(!NoInternetDialogFragment.isTriggered){
-                    NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
-                    NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
-                }
+        },"currentWeatherConditions")
+        activity?.finish()
+    }, onFail = {
+        if(!NoInternetDialogFragment.isTriggered){
+            NoInternetDialogFragment.show(requireActivity().supportFragmentManager, "NoInternetDialog")
+            NoInternetDialogFragment.isTriggered=!NoInternetDialogFragment.isTriggered
+        }
 
-            }, onLoading = {
+    }, onLoading = {
 
-            },"locationInfoByCoordinates")
+    },"locationInfoByCoordinates")
+
+    }
+    else
+    {
+        startActivity(Intent(requireActivity(), LocationInfoActivity::class.java).putExtra("latitude",currentLatitude).putExtra("longitude",currentLongitude))
+    }
         }
 
         binding.mapWebView.loadUrl("file:///android_asset/map.html")
