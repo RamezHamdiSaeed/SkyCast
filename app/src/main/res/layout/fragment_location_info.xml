@@ -254,16 +254,6 @@
                         app:layout_constraintTop_toBottomOf="@+id/tvCurrentDate"
                         tools:text="09 : 10" />
 
-                    <ImageView
-                        android:id="@+id/imgCurrentWeatherAdd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
-                        android:layout_marginTop="16dp"
-                        android:src="@drawable/current_weather_plus"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                     <TextView
                         android:id="@+id/tvCurrentWeatherDescription"
                         android:layout_width="wrap_content"

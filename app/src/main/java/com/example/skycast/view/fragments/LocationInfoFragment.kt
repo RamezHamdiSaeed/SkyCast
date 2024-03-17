@@ -28,6 +28,7 @@ import com.example.skycast.model.LocationInfo
 import com.example.skycast.model.LocationWeatherRepositoryImp
 import com.example.skycast.model.Weather
 import com.example.skycast.model.WeatherForecast
+import com.example.skycast.model.WeatherInfo
 import com.example.skycast.network.RemoteDataSourceImp
 import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.NoInternetDialogFragment
@@ -51,6 +52,7 @@ class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:Str
     private lateinit var binding:FragmentLocationInfoBinding
 
     private lateinit var  myViewModel:MyViewModel
+
 
 
 
