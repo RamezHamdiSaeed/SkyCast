@@ -21,7 +21,7 @@ class LocationInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityLocationInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        locationInfoFragment= LocationInfoFragment(intent.getStringExtra("latitude"),intent.getStringExtra("longitude"))
+        locationInfoFragment= LocationInfoFragment(intent.getStringExtra("latitude"),intent.getStringExtra("longitude"),true)
         fragmentMngr=supportFragmentManager
         fragmentTransaction=fragmentMngr.beginTransaction()
         fragmentTransaction.replace(binding.infoFragmentContainerView.id,locationInfoFragment,"Dynamic Injection")

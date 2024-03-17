@@ -1,5 +1,6 @@
 package com.example.skycast.view.activities
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,12 +9,16 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.example.skycast.R
 import com.example.skycast.databinding.ActivitySittingsBinding
+import com.example.skycast.utility.DataManipulator
+import java.util.Locale
 
 class SittingsActivity : AppCompatActivity() {
     lateinit var binding:ActivitySittingsBinding
+    lateinit var dataManipulator: DataManipulator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivitySittingsBinding.inflate(layoutInflater)
+        dataManipulator= DataManipulator(this)
 
         val temperatureUnits = resources.getStringArray(R.array.temperatureUnits)
         val windUnits = resources.getStringArray(R.array.windUnits)
@@ -37,7 +42,12 @@ class SittingsActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(this@SittingsActivity, "selected text: ${temperatureUnits[position]}", Toast.LENGTH_SHORT).show()
+                when(temperatureUnits[position]){
+                    "Celsius"-> dataManipulator.changeMeasureUnit(DataManipulator.DataType.Temp,"°C")
+                     "Fahrenheit"->dataManipulator.changeMeasureUnit(DataManipulator.DataType.Temp,"F")
+                     else->dataManipulator.changeMeasureUnit(DataManipulator.DataType.Temp,"K")
+
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -51,7 +61,10 @@ class SittingsActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(this@SittingsActivity, "selected text: ${windUnits[position]}", Toast.LENGTH_SHORT).show()
+                when(windUnits[position]){
+                    "meter/sec"-> dataManipulator.changeMeasureUnit(DataManipulator.DataType.Wind,"meter/sec")
+                    "miles/hour"->dataManipulator.changeMeasureUnit(DataManipulator.DataType.Wind,"miles/hour")
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -65,7 +78,10 @@ class SittingsActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(this@SittingsActivity, "selected text: ${languages[position]}", Toast.LENGTH_SHORT).show()
+                when(languages[position]){
+                    languages[1]-> setLocale("en")
+                    languages[2]->setLocale("ar")
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -79,7 +95,7 @@ class SittingsActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Toast.makeText(this@SittingsActivity, "selected text: ${locationOptions[position]}", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -87,8 +103,13 @@ class SittingsActivity : AppCompatActivity() {
 
         }
 
-
-
         setContentView(binding.root)
+    }
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = Configuration()
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }

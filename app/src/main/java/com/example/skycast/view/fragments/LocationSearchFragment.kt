@@ -76,7 +76,7 @@ class LocationSearchFragment(val isForInsert:Boolean=false) : Fragment() {
             val dataManipulator= DataManipulator(requireActivity())
             myViewModel.insertLocation(WeatherInfo(data.address?.city?:data.address?.country!!,
                 longitude = currentLongitude, lat = currentLatitude,
-                temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp, weatherConditions?.current?.temp.toString()),
+                temp=weatherConditions?.current?.temp.toString(),
                 icon= dataManipulator.prepareImageUrl(weatherConditions?.current?.weather?.get(0)?.icon?:""),
                 description = weatherConditions?.current?.weather?.get(0)?.description?:""))
 

@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -45,7 +46,7 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 
-class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:String?=null) : Fragment() {
+class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:String?=null,var isFromSearchOrFavorite:Boolean=false) : Fragment() {
 
     private val TAG = "LocationInfoFragment"
     private lateinit var dataManipulator: DataManipulator
@@ -86,22 +87,6 @@ class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:Str
         )
         myViewModel= ViewModelProvider(this, MyViewModelFactory(repository)).get(MyViewModel::class.java)
 
-        if(latitudeValue==null || longitudeValue==null){
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-            // Check if the app has location permissions, request if not
-            if (checkLocationPermission()) {
-                requestLocationUpdates()
-            } else {
-                requestLocationPermission()
-            }
-        }
-        else{
-            myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
-            myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
-            myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
-
-        }
 
 
         handleCrudOperation(myViewModel.currentWeatherConditions, onSuccess = {info->
@@ -178,7 +163,30 @@ class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:Str
         },"locationInfoByCoordinates")
 
         return binding.root
+
+    }//end of onCreateView
+
+    override fun onResume() {
+        super.onResume()
+        if(latitudeValue==null || longitudeValue==null || !isFromSearchOrFavorite){
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+            // Check if the app has location permissions, request if not
+            if (checkLocationPermission()) {
+                requestLocationUpdates()
+            } else {
+                requestLocationPermission()
+            }
+        }
+        else{
+            myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
+            myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
+
+        }
+
     }
+
     private fun checkLocationPermission(): Boolean {
         return (ContextCompat.checkSelfPermission(
             requireActivity(),
@@ -214,12 +222,10 @@ class LocationInfoFragment(var latitudeValue:String?=null,var longitudeValue:Str
                     val longitude = location.longitude
                     latitudeValue = latitude.toString()
                     longitudeValue = longitude.toString()
-                    Log.d(TAG, "requestLocationUpdates: gps: lat: $latitudeValue, long: $longitudeValue")
 
                     myViewModel.getCurrentWeatherConditionsAPI(latitudeValue!!,longitudeValue!!)
                     myViewModel.getLocationInfoByCoordinatesAPI(latitudeValue!!,longitudeValue!!)
                        myViewModel.getCurrentWeatherForcastAPI(latitudeValue!!,longitudeValue!!)
-                    Log.d(TAG, "requestLocationUpdates: gps: lat: $latitudeValue, long: $longitudeValue")
 
                 }
             }

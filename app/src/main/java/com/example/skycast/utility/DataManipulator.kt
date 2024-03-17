@@ -10,12 +10,12 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class DataManipulator (val context: Context){
  private val MY_PREFERENCE="myPref"
     private var pref:SharedPreferences=context.getSharedPreferences(MY_PREFERENCE,Context.MODE_PRIVATE)
     val editor = pref.edit()
-
     public fun filterListForHourlyInfo(listFromResponse: List<ListItem?>?):List<WeatherBriefInfo>{
          var hourlyList:MutableList<WeatherBriefInfo> = mutableListOf()
          val date=listFromResponse?.get(0)?.dt_txt?.split(" ")?.get(0)
@@ -82,15 +82,30 @@ class DataManipulator (val context: Context){
             }
         }
     }
+    public fun changeMeasureUnit(dataType: DataType,value:String){
+        editor.putString(dataType.toString(),value)
+        editor.apply()
+    }
 
     fun getValueWithMeasureUnit(dataType: DataType,plainValue:String):String{
         when (dataType){
             DataType.Temp ->{
-               return plainValue+pref.getString(DataType.Temp.toString(),"°C")
+               val measureUnit:String= pref.getString(DataType.Temp.toString(),"°C")?:"°C"
+                return when(measureUnit){
+                    "°C"->plainValue+pref.getString(DataType.Temp.toString(),"°C")
+                    "K"->(plainValue.toDouble()+273.15).roundToInt().toString()+pref.getString(DataType.Temp.toString(),"K")
+                    else->((plainValue.toDouble()*9/5)+32).roundToInt().toString()+pref.getString(DataType.Temp.toString(),"F")
+                }
+
 
             }
             DataType.Wind->{
-                return plainValue+" "+pref.getString(DataType.Wind.toString(),"meter/sec")
+                val measureUnit:String= pref.getString(DataType.Wind.toString(),"meter/sec")?:"meter/sec"
+
+                return when(measureUnit){
+                    "meter/sec"->plainValue+pref.getString(DataType.Wind.toString(),"meter/sec")
+                    else->(plainValue.toDouble()*2.23694).roundToInt().toString()+pref.getString(DataType.Wind.toString(),"miles/hour")
+                }
 
             }
             DataType.Pressure->{

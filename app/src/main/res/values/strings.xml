@@ -31,6 +31,7 @@
     </string-array>
     <string name="language">language</string>
     <string-array name="languages">
+        <item>Auto</item>
         <item>English</item>
         <item>Arabic</item>
     </string-array>

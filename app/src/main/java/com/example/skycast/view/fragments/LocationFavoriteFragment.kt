@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skycast.databinding.FragmentLocationFavoriteBinding
 import com.example.skycast.view.list.favorit.FavoritListAdapter
 import com.example.skycast.model.WeatherInfo
+import com.example.skycast.utility.DataManipulator
 import com.example.skycast.utility.Status
 import com.example.skycast.view.activities.LocationInfoActivity
 import com.example.skycast.view.activities.LocationSearchActivity
@@ -64,9 +65,13 @@ private val TAG="LocationFavoriteFragment"
         }
 
         handleCrudOperation(myViewModel.savedLocations, onSuccess = {info->
+            val dataManipulator=DataManipulator(requireActivity())
             val data: List<WeatherInfo> =info as List<WeatherInfo>
             Log.d(TAG, "onCreateView: data: $info")
             Log.d(TAG, "onCreateView: data:${data}")
+            data.forEach{
+                it.temp=dataManipulator.getValueWithMeasureUnit(DataManipulator.DataType.Temp,it.temp)
+            }
             favoritListAdapter.submitList(data)
 
         }, onFail = {

@@ -31,7 +31,7 @@ class FavoritListAdapter(var itemOnClick:(latitude:String,longitude:String)->Uni
         holder.binding.cvFavoritItem.setOnClickListener{
             itemOnClick(item.lat,item.longitude)
         }
-        Log.d(TAG, "onBindViewHolder: ${item.longitude}")
+        Log.d(TAG, "onBindViewHolder: ${item.temp}")
 
     }
 
